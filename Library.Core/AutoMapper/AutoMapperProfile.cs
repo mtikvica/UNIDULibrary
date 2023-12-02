@@ -12,5 +12,8 @@ public class AutoMapperProfile : Profile
 
         CreateMap<Location, LocationDto>();
         CreateMap<LocationDto, Location>();
+
+        CreateMap<Publisher, PublisherDto>();
+        CreateMap<PublisherDto, Publisher>();
     }
 }

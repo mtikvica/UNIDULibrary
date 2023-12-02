@@ -6,7 +6,6 @@ namespace Library.API.Controllers;
 [ApiController]
 public class LocationController : ControllerBase
 {
-    // same as in DepartmentController
     private readonly ILocationService _locationService;
 
     public LocationController(ILocationService locationService)

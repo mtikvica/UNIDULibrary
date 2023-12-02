@@ -14,6 +14,6 @@ public static class DependencyInjection
         services.AddScoped<IOpenLibraryService, OpenLibraryService>();
         services.AddScoped<IDepartmentService, DepartmentService>();
         services.AddScoped<ILocationService, LocationService>();
-
+        services.AddScoped<IPublisherService, PublisherService>();
     }
 }
