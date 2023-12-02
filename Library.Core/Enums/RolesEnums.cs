@@ -1,4 +1,4 @@
-﻿namespace Library.Data.Enums;
+﻿namespace Library.Core.Enums;
 public enum RolesEnums
 {
     Student = 1,
