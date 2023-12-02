@@ -1,0 +1,50 @@
+﻿using Library.Core.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Library.API.Controllers;
+[Route("[controller]")]
+[ApiController]
+public class DepartmentController : ControllerBase
+{
+    private readonly IDepartmentService _departmentService;
+
+    public DepartmentController(IDepartmentService departmentService)
+    {
+        _departmentService = departmentService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetDepartments()
+    {
+        var departments = await _departmentService.GetDeparmentsAsync();
+        return Ok(departments);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetDepartment(int id)
+    {
+        var department = await _departmentService.GetDepartmentAsync(id);
+        return Ok(department);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddDepartment(string departmentName)
+    {
+        var department = await _departmentService.AddDepartmentAsync(departmentName);
+        return Created("Department created succesfully", department);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateDepartment(int id, string departmentName)
+    {
+        var department = await _departmentService.UpdateDepartmentAsync(id, departmentName);
+        return Ok(department);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteDepartment(int id)
+    {
+        await _departmentService.DeleteDepartmentAsync(id);
+        return NoContent();
+    }
+}
