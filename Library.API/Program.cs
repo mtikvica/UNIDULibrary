@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigureHttpClient();
+builder.Services.AddRepositories();
 builder.Services.AddCoreServices();
 builder.Services.AddContext();
 

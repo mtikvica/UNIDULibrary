@@ -1,6 +1,7 @@
 ﻿using Library.Core.Dtos;
 using Library.Core.Requests;
 using Library.Core.Services.Interfaces;
+using Library.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers;
@@ -37,10 +38,10 @@ public class StudentController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateStudent(Guid id, [FromBody] StudentDto studentDto)
+    public async Task<IActionResult> UpdateStudent(Guid id, [FromBody] Student student)
     {
-        var student = await _studentService.UpdateStudentAsync(id, studentDto);
-        return Ok(student);
+        var response = await _studentService.UpdateStudentAsync(student);
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]

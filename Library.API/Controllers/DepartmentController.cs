@@ -1,4 +1,5 @@
 ﻿using Library.Core.Services.Interfaces;
+using Library.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers;
@@ -35,10 +36,10 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDepartment(int id, string departmentName)
+    public async Task<IActionResult> UpdateDepartment(Department department)
     {
-        var department = await _departmentService.UpdateDepartmentAsync(id, departmentName);
-        return Ok(department);
+        var response = await _departmentService.UpdateDepartmentAsync(department);
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]

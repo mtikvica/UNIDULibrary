@@ -8,5 +8,5 @@ public interface ILocationService
     Task<bool> DeleteLocationAsync(int id);
     Task<Location> GetLocationAsync(int id);
     Task<IEnumerable<LocationDto>> GetLocationsAsync();
-    Task<LocationDto> UpdateLocationAsync(int id, string locationName);
+    Task<LocationDto> UpdateLocationAsync(Location location);
 }

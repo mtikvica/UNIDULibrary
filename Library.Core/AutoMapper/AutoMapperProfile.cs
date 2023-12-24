@@ -8,17 +8,13 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<Department, DepartmentDto>();
-        CreateMap<DepartmentDto, Department>();
+        CreateMap<Department, DepartmentDto>().ReverseMap();
 
-        CreateMap<Location, LocationDto>();
-        CreateMap<LocationDto, Location>();
+        CreateMap<Location, LocationDto>().ReverseMap();
 
-        CreateMap<Publisher, PublisherDto>();
-        CreateMap<PublisherDto, Publisher>();
+        CreateMap<Publisher, PublisherDto>().ReverseMap();
 
-        CreateMap<Student, StudentDto>();
-        CreateMap<StudentDto, Student>();
+        CreateMap<Student, StudentDto>().ReverseMap();
 
         CreateMap<Student, StudentResponse>()
             .ForMember(dest => dest.Department, opt => opt.MapFrom(src => src.Department.DepartmentName));

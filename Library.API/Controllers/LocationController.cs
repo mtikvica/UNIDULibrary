@@ -1,4 +1,5 @@
 ﻿using Library.Core.Services.Interfaces;
+using Library.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers;
@@ -35,10 +36,10 @@ public class LocationController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateLocation(int id, string locationName)
+    public async Task<IActionResult> UpdateLocation(Location location)
     {
-        var location = await _locationService.UpdateLocationAsync(id, locationName);
-        return Ok(location);
+        var response = await _locationService.UpdateLocationAsync(location);
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]

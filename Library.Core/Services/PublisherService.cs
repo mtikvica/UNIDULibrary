@@ -1,22 +1,16 @@
 ﻿using AutoMapper;
 using Library.Core.Dtos;
-using Library.Core.Exceptions;
 using Library.Core.Services.Interfaces;
-using Library.Data.Context;
 using Library.Data.Entities;
+using Library.Data.Exceptions;
+using Library.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Core.Services;
-public class PublisherService : IPublisherService
+public class PublisherService(IMapper mapper, IPublisherRepository publisherRepository) : IPublisherService
 {
-    private readonly IMapper _mapper;
-    private readonly UNIDULibraryDbContext _context;
-
-    public PublisherService(IMapper mapper, UNIDULibraryDbContext context)
-    {
-        _mapper = mapper;
-        _context = context;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IPublisherRepository _publisherRepository = publisherRepository;
 
     public async Task<PublisherDto> AddPublisherAsync(string publisherName)
     {
@@ -24,48 +18,32 @@ public class PublisherService : IPublisherService
 
         var publisher = _mapper.Map<Publisher>(deparmtentDto);
 
-        _context.Publishers.Add(publisher);
-        await _context.SaveChangesAsync();
+        await _publisherRepository.AddAsync(publisher);
 
         return _mapper.Map<PublisherDto>(publisher);
     }
 
     public async Task<Publisher> GetPublisherByIdAsync(int id)
     {
-        var publisher = await _context.Publishers.FindAsync(id);
-
-        if (publisher is null)
-        {
-            throw new NotFoundException($"Publisher with id {id} not found");
-        }
-
-        return publisher;
+        var publisher = await _publisherRepository.GetBy(x => x.PublisherId == id).FirstOrDefaultAsync();
+        return publisher is null ? throw new NotFoundException($"Publisher with id {id} not found") : publisher;
     }
 
     public async Task<IEnumerable<PublisherDto>> GetPublishersAsync()
     {
-        var publishers = await _context.Publishers.ToListAsync();
+        var publishers = await _publisherRepository.GetAllAsync();
         return _mapper.Map<IEnumerable<PublisherDto>>(publishers);
     }
 
-    public async Task<PublisherDto> UpdatePublisherAsync(int id, string publisherName)
+    public async Task<PublisherDto> UpdatePublisherAsync(Publisher publisher)
     {
-        var publisher = await GetPublisherByIdAsync(id);
-
-        publisher.PublisherName = publisherName;
-
-        await _context.SaveChangesAsync();
+        await _publisherRepository.UpdateAsync(publisher);
 
         return _mapper.Map<PublisherDto>(publisher);
     }
 
-    public async Task<bool> DeletePublisherAsync(int id)
+    public async Task DeletePublisherAsync(int id)
     {
-        var publisher = await GetPublisherByIdAsync(id);
-
-        _context.Publishers.Remove(publisher);
-        await _context.SaveChangesAsync();
-
-        return true;
+        await _publisherRepository.DeleteAsync(id);
     }
 }

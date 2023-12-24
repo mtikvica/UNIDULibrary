@@ -1,4 +1,4 @@
-﻿namespace Library.Core.Exceptions;
+﻿namespace Library.Data.Exceptions;
 public class NotFoundException : Exception
 {
     public NotFoundException() { }

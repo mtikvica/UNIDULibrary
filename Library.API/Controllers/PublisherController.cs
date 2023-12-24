@@ -1,4 +1,5 @@
 ﻿using Library.Core.Services.Interfaces;
+using Library.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers;
@@ -35,10 +36,10 @@ public class PublisherController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdatePublisherAsync(int id, string publisherName)
+    public async Task<IActionResult> UpdatePublisherAsync(Publisher publisher)
     {
-        var publisher = await _publisherService.UpdatePublisherAsync(id, publisherName);
-        return Ok(publisher);
+        var response = await _publisherService.UpdatePublisherAsync(publisher);
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]

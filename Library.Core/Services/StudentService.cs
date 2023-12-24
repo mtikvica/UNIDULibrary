@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Library.Core.Dtos;
-using Library.Core.Exceptions;
 using Library.Core.Extensions;
 using Library.Core.Requests;
 using Library.Core.Responses.PaginatedResponses;
@@ -8,19 +7,14 @@ using Library.Core.Responses.StudentResponses;
 using Library.Core.Services.Interfaces;
 using Library.Data.Context;
 using Library.Data.Entities;
+using Library.Data.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Core.Services;
-public class StudentService : IStudentService
+public class StudentService(UNIDULibraryDbContext context, IMapper mapper) : IStudentService
 {
-    private readonly UNIDULibraryDbContext _context;
-    private readonly IMapper _mapper;
-
-    public StudentService(UNIDULibraryDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
+    private readonly UNIDULibraryDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<PaginatedResponse> GetAllStudentsAsync(PageRequest request)
     {
@@ -58,15 +52,9 @@ public class StudentService : IStudentService
         return studentDto;
     }
 
-    public async Task<StudentResponse> UpdateStudentAsync(Guid studentId, StudentDto studentDto)
+    public async Task<StudentResponse> UpdateStudentAsync(Student student)
     {
-        var student = await GetByStudentIdAsync(studentId);
-
-        student.Name = studentDto.Name;
-        student.Surname = studentDto.Surname;
-        student.Email = studentDto.Email;
-        student.Password = studentDto.Password;
-        student.DepartmentId = studentDto.DepartmentId;
+        _context.Entry(student).State = EntityState.Modified;
 
         await _context.SaveChangesAsync();
 
@@ -87,10 +75,13 @@ public class StudentService : IStudentService
     {
         var student = await _context.Students.AsNoTracking().FirstOrDefaultAsync(x => x.StudentId == studentId);
 
-        if (student is null)
-        {
-            throw new NotFoundException($"Student with id: {studentId} was not found");
-        }
-        return student;
+        return student is null ? throw new NotFoundException($"Student with id: {studentId} was not found") : student;
+    }
+
+    public async Task<Student> GetStudentByEmailAndPassword(string email, string password)
+    {
+        var student = await _context.Students.Include(x => x.Department).FirstOrDefaultAsync(x => x.Email == email && x.Password == password);
+
+        return student is null ? throw new NotFoundException($"Student with email: {email} was not found") : student;
     }
 }

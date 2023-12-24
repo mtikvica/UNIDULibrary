@@ -1,38 +1,28 @@
 ﻿using AutoMapper;
 using Library.Core.Dtos;
-using Library.Core.Exceptions;
 using Library.Core.Services.Interfaces;
-using Library.Data.Context;
 using Library.Data.Entities;
+using Library.Data.Exceptions;
+using Library.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Core.Services;
-public class LocationService : ILocationService
+public class LocationService(ILocationRepository locationRepository, IMapper mapper) : ILocationService
 {
-    private readonly UNIDULibraryDbContext _context;
-    private readonly IMapper _mapper;
-
-    public LocationService(UNIDULibraryDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
+    private readonly ILocationRepository _locationRepository = locationRepository;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<IEnumerable<LocationDto>> GetLocationsAsync()
     {
-        var locations = await _context.Locations.AsNoTracking().ToListAsync();
+        var locations = await _locationRepository.GetAllAsync();
         return locations.Select(x => _mapper.Map<LocationDto>(x)).ToList();
     }
 
     public async Task<Location> GetLocationAsync(int id)
     {
-        var location = await _context.Locations.Where(x => x.LocationId == id).FirstOrDefaultAsync();
+        var location = await _locationRepository.GetBy(x => x.LocationId == id).FirstOrDefaultAsync();
 
-        if (location is null)
-        {
-            throw new NotFoundException($"Location with id: {id} was not found!");
-        }
-        return location;
+        return location is null ? throw new NotFoundException($"Location with id: {id} was not found!") : location;
     }
 
     public async Task<LocationDto> AddLocationAsync(string locationName)
@@ -41,8 +31,7 @@ public class LocationService : ILocationService
 
         var location = _mapper.Map<Location>(locationDto);
 
-        _context.Locations.Add(location);
-        await _context.SaveChangesAsync();
+        await _locationRepository.AddAsync(location);
 
         return _mapper.Map<LocationDto>(location);
     }
@@ -51,19 +40,14 @@ public class LocationService : ILocationService
     {
         var location = await GetLocationAsync(id);
 
-        _context.Locations.Remove(location);
-        await _context.SaveChangesAsync();
+        await _locationRepository.DeleteAsync(location);
 
         return true;
     }
 
-    public async Task<LocationDto> UpdateLocationAsync(int id, string locationName)
+    public async Task<LocationDto> UpdateLocationAsync(Location location)
     {
-        var location = await GetLocationAsync(id);
-
-        location.LocationName = locationName;
-
-        await _context.SaveChangesAsync();
+        await _locationRepository.UpdateAsync(location);
 
         return _mapper.Map<LocationDto>(location);
     }

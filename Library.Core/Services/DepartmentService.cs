@@ -1,38 +1,32 @@
 ﻿using AutoMapper;
 using Library.Core.Dtos;
-using Library.Core.Exceptions;
 using Library.Core.Services.Interfaces;
-using Library.Data.Context;
 using Library.Data.Entities;
+using Library.Data.Exceptions;
+using Library.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Core.Services;
-public class DepartmentService : IDepartmentService
+public class DepartmentService(IDepartmentRepository departmentRepository, IMapper mapper) : IDepartmentService
 {
-    private readonly UNIDULibraryDbContext _context;
-    private readonly IMapper _mapper;
-
-    public DepartmentService(UNIDULibraryDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
+    private readonly IDepartmentRepository _departmentRepository = departmentRepository;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<IEnumerable<DepartmentDto>> GetDeparmentsAsync()
     {
-        var departments = await _context.Departments.AsNoTracking().ToListAsync();
+        var departments = await _departmentRepository.GetAllAsync();
         return departments.Select(x => _mapper.Map<DepartmentDto>(x)).ToList();
     }
 
-    public async Task<Department> GetDepartmentAsync(int id)
+    public async Task<DepartmentDto> GetDepartmentAsync(int id)
     {
-        var department = await _context.Departments.Where(x => x.DepartmentId == id).FirstOrDefaultAsync();
+        var department = await _departmentRepository.GetBy(x => x.DepartmentId == id).FirstOrDefaultAsync();
 
         if (department is null)
         {
             throw new NotFoundException($"Department with id: {id} was not found!");
         }
-        return department;
+        return _mapper.Map<DepartmentDto>(department);
     }
 
     public async Task<DepartmentDto> AddDepartmentAsync(string departmentName)
@@ -41,29 +35,21 @@ public class DepartmentService : IDepartmentService
 
         var department = _mapper.Map<Department>(deparmtentDto);
 
-        _context.Departments.Add(department);
-        await _context.SaveChangesAsync();
+        await _departmentRepository.AddAsync(department);
 
         return _mapper.Map<DepartmentDto>(department);
     }
 
     public async Task<bool> DeleteDepartmentAsync(int id)
     {
-        var department = await GetDepartmentAsync(id);
-
-        _context.Departments.Remove(department);
-        await _context.SaveChangesAsync();
+        await _departmentRepository.DeleteAsync(id);
 
         return true;
     }
 
-    public async Task<DepartmentDto> UpdateDepartmentAsync(int id, string deparmtentName)
+    public async Task<DepartmentDto> UpdateDepartmentAsync(Department department)
     {
-        var department = await GetDepartmentAsync(id);
-
-        department.DepartmentName = deparmtentName;
-
-        await _context.SaveChangesAsync();
+        await _departmentRepository.UpdateAsync(department);
 
         return _mapper.Map<DepartmentDto>(department);
     }
