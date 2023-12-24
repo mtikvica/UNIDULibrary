@@ -1,4 +1,4 @@
-﻿using Library.Core.Exceptions;
+﻿using Library.Data.Exceptions;
 using System.Net;
 
 namespace Library.API.Middlewares;
