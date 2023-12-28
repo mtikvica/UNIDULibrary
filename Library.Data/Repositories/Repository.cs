@@ -21,6 +21,30 @@ public class Repository<T> : IRepository<T> where T : class
         return await _entity.AsNoTracking().ToListAsync();
     }
 
+    public IQueryable<T> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includes)
+    {
+        var query = _entity.AsNoTracking();
+
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+
+        return query;
+    }
+
+    public IQueryable<T> GetAllWithIncludesAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+    {
+        var query = _entity.AsNoTracking().Where(predicate);
+
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+
+        return query;
+    }
+
     public IQueryable<T> GetBy(Expression<Func<T, bool>> predicate)
     {
         return _entity.AsNoTracking().Where(predicate);

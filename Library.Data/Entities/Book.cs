@@ -16,9 +16,9 @@ public class Book
 
     public int? LocationId { get; set; }
 
-    public DateOnly? PublicationDate { get; set; }
+    public int? PublicationYear { get; set; }
 
-    public required InventoryState InventoryState { get; set; }
+    public InventoryState? InventoryState { get; set; }
 
     public Department? Department { get; set; }
 

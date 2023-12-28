@@ -8,6 +8,10 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
+        CreateMap<Author, AuthorDto>().ReverseMap();
+
+        CreateMap<Book, BookDto>().ReverseMap();
+
         CreateMap<Department, DepartmentDto>().ReverseMap();
 
         CreateMap<Location, LocationDto>().ReverseMap();
