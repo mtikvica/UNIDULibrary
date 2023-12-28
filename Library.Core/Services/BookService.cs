@@ -84,9 +84,50 @@ public class BookService(IBookRepository bookRepository, IOpenLibraryService ope
         return book;
     }
 
-    public async Task<Book> AddBookAsync(Book bookDto)
+    public async Task<Book> AddBookAsync(Book book)
     {
-        var book = await _bookRepository.AddAsync(_mapper.Map<Book>(bookDto));
+        var response = await _bookRepository.AddAsync(book);
+        return response;
+    }
+
+    public async Task<Book> UpdateBookAsync(Book book)
+    {
+        var response = await _bookRepository.UpdateAsync(book);
+        return response;
+    }
+
+    public async Task<Book> GetBookAsync(Guid id)
+    {
+        var book = await _bookRepository.GetBy(x => x.BookId == id).FirstOrDefaultAsync() ?? throw new NotFoundException($"Book with {id} is not found!");
         return book;
+    }
+
+    public async Task<Book> GetBookByTitleAsync(string title)
+    {
+        var includes = new Expression<Func<Book, object>>[]
+        {
+            x => x.Authors,
+            x => x.Publisher
+        };
+
+        var book = await _bookRepository.GetAllWithIncludesAsync(x => x.Title == title, includes).FirstOrDefaultAsync() ?? throw new NotFoundException($"Book with {title} is not found!");
+        return book;
+    }
+
+    public async Task<Book> GetBookByAuthorAsync(string author)
+    {
+        var includes = new Expression<Func<Book, object>>[]
+        {
+            x => x.Authors,
+            x => x.Publisher
+        };
+
+        var book = await _bookRepository.GetAllWithIncludesAsync(x => x.Authors.Any(x => x.AuthorName == author), includes).FirstOrDefaultAsync() ?? throw new NotFoundException($"Book with {author} is not found!");
+        return book;
+    }
+
+    public async Task DeleteBookAsync(Guid id)
+    {
+        await _bookRepository.DeleteAsync(id);
     }
 }
