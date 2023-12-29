@@ -22,5 +22,7 @@ public class AutoMapperProfile : Profile
 
         CreateMap<Student, StudentResponse>()
             .ForMember(dest => dest.Department, opt => opt.MapFrom(src => src.Department.DepartmentName));
+
+        CreateMap<Staff, StaffDto>().ReverseMap();
     }
 }
