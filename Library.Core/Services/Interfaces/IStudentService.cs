@@ -12,4 +12,5 @@ public interface IStudentService
     Task<PaginatedResponse> GetAllStudentsAsync(PageRequest request);
     Task<StudentResponse> GetStudentResponseByIdAsync(Guid studentId);
     Task<StudentResponse> UpdateStudentAsync(Student student);
+    Task<StudentResponse> GetStudentByEmailAndPassword(string email, string password);
 }

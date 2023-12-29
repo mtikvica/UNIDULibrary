@@ -15,6 +15,7 @@ public static class DependencyInjection
         services.AddScoped<IPublisherRepository, PublisherRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IAuthorRepository, AuthorRepository>();
+        services.AddScoped<IStudentRepository, StudentRepository>();
     }
 
     public static void AddCoreServices(this IServiceCollection services)

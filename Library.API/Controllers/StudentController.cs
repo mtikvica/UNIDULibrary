@@ -50,4 +50,12 @@ public class StudentController : ControllerBase
         await _studentService.DeleteStudentAsync(id);
         return NoContent();
     }
+
+    // get student by email and password
+    [HttpGet("login")]
+    public async Task<IActionResult> Login([FromQuery] string email, [FromQuery] string password)
+    {
+        var student = await _studentService.GetStudentByEmailAndPassword(email, password);
+        return Ok(student);
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Library.Core.Dtos;
 using Library.Core.Extensions;
+using Library.Core.Helpers;
 using Library.Core.Requests;
 using Library.Core.Responses.PaginatedResponses;
 using Library.Core.Responses.StudentResponses;
@@ -78,10 +79,17 @@ public class StudentService(UNIDULibraryDbContext context, IMapper mapper) : ISt
         return student is null ? throw new NotFoundException($"Student with id: {studentId} was not found") : student;
     }
 
-    public async Task<Student> GetStudentByEmailAndPassword(string email, string password)
+    public async Task<StudentResponse> GetStudentByEmailAndPassword(string email, string password)
     {
-        var student = await _context.Students.Include(x => x.Department).FirstOrDefaultAsync(x => x.Email == email && x.Password == password);
+        var student = await _context.Students
+            .Include(x => x.Department)
+            .FirstOrDefaultAsync(x => x.Email == email);
 
-        return student is null ? throw new NotFoundException($"Student with email: {email} was not found") : student;
+        if (student is not null && !PasswordHashHelper.VerifyPassword(password, student.Password))
+        {
+            throw new NotFoundException($"Student with email: {email} was not found");
+        }
+
+        return _mapper.Map<StudentResponse>(student) ?? throw new NotFoundException($"Password is incorrect!");
     }
 }
