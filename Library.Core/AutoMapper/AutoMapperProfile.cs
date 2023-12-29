@@ -24,5 +24,7 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Department, opt => opt.MapFrom(src => src.Department.DepartmentName));
 
         CreateMap<Staff, StaffDto>().ReverseMap();
+
+        CreateMap<BookCopy, BookCopyDto>().ReverseMap();
     }
 }
