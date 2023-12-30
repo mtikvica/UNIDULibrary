@@ -11,9 +11,10 @@ using System.Linq.Expressions;
 
 namespace Library.Core.Services;
 
-public class BookService(IBookRepository bookRepository, IOpenLibraryService openLibraryService, IMapper mapper) : IBookService
+public class BookService(IBookRepository bookRepository, IPublisherRepository publisherRepository, IOpenLibraryService openLibraryService, IMapper mapper) : IBookService
 {
     private readonly IBookRepository _bookRepository = bookRepository;
+    private readonly IPublisherRepository _publisherRepository = publisherRepository;
     private readonly IOpenLibraryService _openLibraryService = openLibraryService;
     private readonly IMapper _mapper = mapper;
 
@@ -23,7 +24,9 @@ public class BookService(IBookRepository bookRepository, IOpenLibraryService ope
 
         var authors = new List<Author>();
 
-        var publisher = new Publisher() { PublisherName = openLibraryBookResponse.Publishers.FirstOrDefault() };
+        var publisherName = openLibraryBookResponse.Publishers.FirstOrDefault();
+
+        var publisher = await _publisherRepository.GetBy(x => x.PublisherName == publisherName).FirstOrDefaultAsync() ?? new Publisher() { PublisherName = publisherName };
 
         foreach (var authorCode in openLibraryBookResponse.Authors)
         {
@@ -45,8 +48,14 @@ public class BookService(IBookRepository bookRepository, IOpenLibraryService ope
             Authors = authors,
             PublicationYear = int.TryParse(publishDate, out var publicationYear) ? publicationYear : null,
             NumberOfPages = openLibraryBookResponse.NumberOfPages,
-            Isbn = openLibraryBookResponse.Isbn10.FirstOrDefault()
+            Isbn = isbn
         };
+
+        if (publisher.PublisherId is not 0)
+        {
+            book.PublisherId = publisher.PublisherId;
+            book.Publisher = null;
+        }
 
         var bookResponse = await _bookRepository.AddAsync(book);
 
