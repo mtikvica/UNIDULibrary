@@ -48,6 +48,25 @@ public class UNIDULibraryDbContext : DbContext
             .HasOne(a => a.InventoryState)
             .WithOne(b => b.Book)
             .HasForeignKey<InventoryState>(i => i.BookId);
-    }
 
+        modelBuilder.Entity<Book>()
+            .HasIndex(b => new { b.Title, b.Isbn })
+            .IsUnique();
+
+        modelBuilder.Entity<Publisher>()
+            .HasIndex(u => u.PublisherName)
+            .IsUnique();
+
+        modelBuilder.Entity<Department>()
+            .HasIndex(u => u.DepartmentName)
+            .IsUnique();
+
+        modelBuilder.Entity<Student>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
+        modelBuilder.Entity<Staff>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+    }
 }

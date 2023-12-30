@@ -81,7 +81,7 @@ namespace Library.Data.Migrations
 
                     b.Property<string>("Isbn")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("LocationId")
                         .HasColumnType("int");
@@ -89,15 +89,15 @@ namespace Library.Data.Migrations
                     b.Property<int?>("NumberOfPages")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly?>("PublicationDate")
-                        .HasColumnType("date");
+                    b.Property<int?>("PublicationYear")
+                        .HasColumnType("int");
 
                     b.Property<int?>("PublisherId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("BookId");
 
@@ -106,6 +106,9 @@ namespace Library.Data.Migrations
                     b.HasIndex("LocationId");
 
                     b.HasIndex("PublisherId");
+
+                    b.HasIndex("Title", "Isbn")
+                        .IsUnique();
 
                     b.ToTable("Books");
                 });
@@ -136,9 +139,12 @@ namespace Library.Data.Migrations
 
                     b.Property<string>("DepartmentName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("DepartmentId");
+
+                    b.HasIndex("DepartmentName")
+                        .IsUnique();
 
                     b.ToTable("Departments");
                 });
@@ -175,19 +181,19 @@ namespace Library.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("AvailableCount")
+                    b.Property<int>("AvailableCount")
                         .HasColumnType("int");
 
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("BorrowedCount")
+                    b.Property<int>("BorrowedCount")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ReservedCount")
+                    b.Property<int>("ReservedCount")
                         .HasColumnType("int");
 
                     b.HasKey("InventoryStateId");
@@ -258,9 +264,12 @@ namespace Library.Data.Migrations
 
                     b.Property<string>("PublisherName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PublisherId");
+
+                    b.HasIndex("PublisherName")
+                        .IsUnique();
 
                     b.ToTable("Publishers");
                 });
@@ -317,7 +326,7 @@ namespace Library.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -336,6 +345,9 @@ namespace Library.Data.Migrations
 
                     b.HasKey("StaffId");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("RoleId");
 
                     b.ToTable("Staff");
@@ -352,7 +364,7 @@ namespace Library.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -375,6 +387,9 @@ namespace Library.Data.Migrations
                     b.HasKey("StudentId");
 
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("RoleId");
 
@@ -552,8 +567,7 @@ namespace Library.Data.Migrations
 
             modelBuilder.Entity("Library.Data.Entities.Book", b =>
                 {
-                    b.Navigation("InventoryState")
-                        .IsRequired();
+                    b.Navigation("InventoryState");
                 });
 
             modelBuilder.Entity("Library.Data.Entities.BookCopy", b =>

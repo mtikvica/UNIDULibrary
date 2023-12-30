@@ -5,7 +5,7 @@ namespace Library.API.Middlewares;
 
 public class ExceptionHandlingMiddleware
 {
-    private record ExceptionResponse(int StatusCode, string Sessage);
+    private record ExceptionResponse(int StatusCode, string Message, string? InnerExceptionMessage = null);
 
     private readonly RequestDelegate _next;
 
@@ -32,12 +32,12 @@ public class ExceptionHandlingMiddleware
         {
             ApplicationException _ => new ExceptionResponse((int)HttpStatusCode.BadRequest, exception.Message),
             NotFoundException _ => new ExceptionResponse((int)HttpStatusCode.NotFound, exception.Message),
-            _ => new ExceptionResponse((int)HttpStatusCode.InternalServerError, exception.Message),
+            _ => new ExceptionResponse((int)HttpStatusCode.InternalServerError, exception.Message, exception.InnerException?.Message),
         };
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)response.StatusCode;
-        await context.Response.WriteAsJsonAsync(response);
 
+        await context.Response.WriteAsJsonAsync(response);
     }
 }
