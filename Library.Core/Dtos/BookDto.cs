@@ -1,16 +1,9 @@
 ﻿namespace Library.Core.Dtos;
-public class BookDto
+public class BookDto(string title, string isbn)
 {
-    public BookDto(string title, string isbn)
-    {
-        Title = title;
-        Isbn = isbn;
-    }
+    public string Title { get; set; } = title;
 
-
-    public string Title { get; set; } = null!;
-
-    public string Isbn { get; set; } = null!;
+    public string Isbn { get; set; } = isbn;
 
     public int? NumberOfPages { get; set; }
 

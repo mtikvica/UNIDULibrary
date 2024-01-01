@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Library.Core.Extensions;
 using Library.Core.Requests;
+using Library.Core.Responses.BookResponse;
 using Library.Core.Responses.PaginatedResponses;
 using Library.Core.Services.Interfaces;
 using Library.Data.Entities;
@@ -77,7 +78,7 @@ public class BookService(IBookRepository bookRepository, IPublisherRepository pu
             PageNumber = request.PageNumber,
             PageSize = request.PageSize,
             TotalPages = (int)Math.Ceiling(books.Count() / (double)request.PageSize),
-            Records = books.Select(x => _mapper.Map<Book>(x))
+            Records = books.Select(x => _mapper.Map<BookResponse>(x))
         };
     }
 

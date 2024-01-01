@@ -6,9 +6,10 @@ using Library.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Core.Services;
-public class BookCopyService(IBookCopyRepository bookCopyRepository, IBookRepository bookRepository, IMapper mapper) : IBookCopyService
+public class BookCopyService(IBookCopyRepository bookCopyRepository, IInventoryStateService inventoryStateService, IBookRepository bookRepository, IMapper mapper) : IBookCopyService
 {
     private readonly IBookCopyRepository _bookCopyRepository = bookCopyRepository;
+    private readonly IInventoryStateService _inventoryStateService = inventoryStateService;
     private readonly IBookRepository _bookRepository = bookRepository;
     private readonly IMapper _mapper = mapper;
 
@@ -33,6 +34,7 @@ public class BookCopyService(IBookCopyRepository bookCopyRepository, IBookReposi
 
             await _bookCopyRepository.AddAsync(_mapper.Map<BookCopy>(bookCopyDto));
         }
+        await _inventoryStateService.ModifyInventoryStateAvailableCount(bookId, ammount);
     }
 
     public async Task<IEnumerable<BookCopy>> GetBookCopiesAsync(Guid bookId)
@@ -60,5 +62,6 @@ public class BookCopyService(IBookCopyRepository bookCopyRepository, IBookReposi
         var bookCopy = await _bookCopyRepository.GetBy(x => x.CopyId == id).FirstOrDefaultAsync() ?? throw new NotFoundException($"BookCopy with id: {id} was not found!");
 
         await _bookCopyRepository.DeleteAsync(bookCopy);
+        await _inventoryStateService.ModifyInventoryStateAvailableCount(bookCopy.BookId, -1);
     }
 }

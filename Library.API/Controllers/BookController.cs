@@ -11,7 +11,7 @@ public class BookController(IBookService bookService) : ControllerBase
     private readonly IBookService _bookService = bookService;
 
     [HttpGet]
-    public async Task<IActionResult> GetBooks(PageRequest request)
+    public async Task<IActionResult> GetBooks([FromQuery] PageRequest request)
     {
         var books = await _bookService.GetAllBooks(request);
         return Ok(books);
