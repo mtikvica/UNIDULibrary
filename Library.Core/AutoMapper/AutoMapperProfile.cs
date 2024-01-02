@@ -35,5 +35,9 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.Authors.Select(x => new AuthorResponse() { AuthorName = x.AuthorName })));
 
         CreateMap<InventoryState, InventoryStateDto>().ReverseMap();
+
+        CreateMap<Loan, LoanDto>().ReverseMap();
+
+        CreateMap<Reservation, ReservationDto>().ReverseMap();
     }
 }

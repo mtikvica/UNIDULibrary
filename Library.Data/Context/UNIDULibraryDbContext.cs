@@ -68,5 +68,13 @@ public class UNIDULibraryDbContext : DbContext
         modelBuilder.Entity<Staff>()
             .HasIndex(u => u.Email)
             .IsUnique();
+
+        modelBuilder.Entity<BookCopy>()
+            .Property(b => b.IsAvailable)
+            .HasDefaultValue(true);
+
+        modelBuilder.Entity<BookCopy>()
+            .Property(b => b.IsReserved)
+            .HasDefaultValue(false);
     }
 }
