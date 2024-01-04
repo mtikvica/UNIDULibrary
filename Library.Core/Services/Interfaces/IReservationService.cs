@@ -9,4 +9,6 @@ public interface IReservationService
     Task<Reservation> GetReservation(Guid reservationId);
     Task<IEnumerable<Reservation>> GetReservationByCopyId(Guid copyId);
     Task<IEnumerable<Reservation>> GetReservationsForStudent(Guid studentId);
+    Task<IEnumerable<Reservation>> GetUnprocessedReservationsAsync();
+    Task UpdateReservationAsync(Reservation reservation);
 }

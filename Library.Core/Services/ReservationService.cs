@@ -82,4 +82,16 @@ public class ReservationService(IReservationRepository reservationRepository, IF
 
         return reservation;
     }
+
+    public async Task<IEnumerable<Reservation>> GetUnprocessedReservationsAsync()
+    {
+        var unprocessedReservations = await _reservationRepository.GetBy(x => x.IsProcessed == false && DateTime.Now > x.ExpirationDate).ToListAsync();
+
+        return unprocessedReservations;
+    }
+
+    public async Task UpdateReservationAsync(Reservation reservation)
+    {
+        await _reservationRepository.UpdateAsync(reservation);
+    }
 }

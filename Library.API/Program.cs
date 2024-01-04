@@ -1,5 +1,6 @@
 using Library.API.Extensions;
 using Library.API.Middlewares;
+using Library.Core.BackgroundServices;
 using Library.Core.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,7 @@ builder.Services.ConfigureHttpClient();
 builder.Services.AddRepositories();
 builder.Services.AddCoreServices();
 builder.Services.AddContext();
+builder.Services.AddHostedService<ReservationBackgroundService>();
 
 var app = builder.Build();
 

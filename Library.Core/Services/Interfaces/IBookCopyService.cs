@@ -9,4 +9,5 @@ public interface IBookCopyService
     Task<BookCopy> GetBookCopyByIdAsync(Guid id);
     Task<IEnumerable<BookCopy>> GetBookCopiesAsync(Guid bookId);
     Task<IEnumerable<BookCopy>> GetBookCopiesAsync(string isbn);
+    Task UpdateBookCopyAsync(BookCopy bookCopy);
 }

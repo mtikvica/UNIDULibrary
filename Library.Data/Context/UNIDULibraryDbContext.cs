@@ -76,5 +76,9 @@ public class UNIDULibraryDbContext : DbContext
         modelBuilder.Entity<BookCopy>()
             .Property(b => b.IsReserved)
             .HasDefaultValue(false);
+
+        modelBuilder.Entity<Reservation>()
+            .Property(r => r.IsProcessed)
+            .HasDefaultValue(false);
     }
 }

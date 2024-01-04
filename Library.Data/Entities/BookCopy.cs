@@ -11,4 +11,22 @@ public class BookCopy
     public bool IsReserved { get; set; }
     public required Book Book { get; set; }
     public ICollection<Loan> Loans { get; set; } = new List<Loan>();
+
+    public void ProcessReservation()
+    {
+        if (IsReserved)
+        {
+            IsReserved = false;
+        }
+        IsReserved = true;
+    }
+
+    public void ProcessLoan()
+    {
+        if (IsAvailable)
+        {
+            IsAvailable = false;
+        }
+        IsAvailable = true;
+    }
 }

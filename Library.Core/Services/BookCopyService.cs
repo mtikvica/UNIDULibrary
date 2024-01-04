@@ -64,4 +64,9 @@ public class BookCopyService(IBookCopyRepository bookCopyRepository, IInventoryS
         await _bookCopyRepository.DeleteAsync(bookCopy);
         await _inventoryStateService.ModifyInventoryStateAvailableCount(bookCopy.BookId, -1);
     }
+
+    public async Task UpdateBookCopyAsync(BookCopy bookCopy)
+    {
+        await _bookCopyRepository.UpdateAsync(bookCopy);
+    }
 }
