@@ -41,6 +41,7 @@ public static class DependencyInjection
         services.AddScoped<IInventoryStateService, InventoryStateService>();
         services.AddScoped<IFineService, FineService>();
         services.AddScoped<IReservationService, ReservationService>();
+        services.AddScoped<ILoanService, LoanService>();
     }
 
 

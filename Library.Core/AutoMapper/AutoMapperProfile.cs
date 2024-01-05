@@ -39,5 +39,7 @@ public class AutoMapperProfile : Profile
         CreateMap<Loan, LoanDto>().ReverseMap();
 
         CreateMap<Reservation, ReservationDto>().ReverseMap();
+
+        CreateMap<Fine, FineDto>().ReverseMap();
     }
 }

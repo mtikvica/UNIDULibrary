@@ -2,6 +2,7 @@
 using Library.Core.Dtos;
 using Library.Core.Services.Interfaces;
 using Library.Data.Entities;
+using Library.Data.Exceptions;
 using Library.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,34 +33,27 @@ public class ReservationService(IReservationRepository reservationRepository, IF
 
         if (studentAlreadyHasReservationOnABook is not null)
         {
-            throw new Exception($"Student with id : {studentID} already has a reservation on this book!");
+            throw new LimitExcededException($"Student with id : {studentID} already has a reservation on this book!");
         }
 
         var studentReservations = _reservationRepository.GetBy(x => x.StudentId == studentID).Count();
 
 
-        if (studentReservations >= Constants.StudentReservationLimit)
+        if (studentReservations > Constants.StudentReservationLimit)
         {
-            throw new Exception($"Student with id : {studentID} has 3 reservations!");
+            throw new LimitExcededException($"Student with id : {studentID} has 3 reservations!");
         }
 
         var bookCopy = await _bookCopyRepository.GetBy(x => x.BookId == bookId && x.IsAvailable == true && x.IsReserved == false).FirstOrDefaultAsync() ?? throw new Exception($"There are no available book copies!");
 
-        bookCopy.IsReserved = true;
+        bookCopy.ProcessReservation();
 
         var reservation = new ReservationDto(bookCopy.CopyId, studentID);
 
-        await AddReservation(bookCopy.CopyId, studentID);
+        await _reservationRepository.AddAsync(_mapper.Map<Reservation>(reservation));
         await _bookCopyRepository.UpdateAsync(bookCopy);
 
         return reservation;
-    }
-
-    private async Task AddReservation(Guid copyId, Guid studentID)
-    {
-        var reservation = new ReservationDto(copyId, studentID);
-
-        await _reservationRepository.AddAsync(_mapper.Map<Reservation>(reservation));
     }
 
     public async Task CancelReservation(Guid reservationId)
