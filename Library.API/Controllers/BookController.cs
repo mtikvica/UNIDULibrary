@@ -4,7 +4,7 @@ using Library.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers;
-[Route("[controller]")]
+[Route("books")]
 [ApiController]
 public class BookController(IBookService bookService) : ControllerBase
 {

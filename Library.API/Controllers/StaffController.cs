@@ -4,7 +4,7 @@ using Library.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers;
-[Route("[controller]")]
+[Route("staff")]
 [ApiController]
 public class StaffController : ControllerBase
 {

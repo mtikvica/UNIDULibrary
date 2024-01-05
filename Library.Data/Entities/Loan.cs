@@ -6,7 +6,7 @@ public class Loan
     public Guid CopyId { get; set; }
     public Guid StudentId { get; set; }
     public DateTime LoanDate { get; set; } = DateTime.Now;
-    public DateTime DueDate { get; set; } = DateTime.Now.AddDays(15);
+    public DateTime DueDate { get; set; } = DateTime.Now.AddDays(14);
     public DateTime? ReturnDate { get; set; }
     public string? LoanStatus { get; set; }
     public required BookCopy Copy { get; set; }
@@ -19,7 +19,12 @@ public class Loan
         {
             return (int)DateTime.Now.Subtract(DueDate).TotalDays;
         }
-
         return (int)ReturnDate.Value.Subtract(DueDate).TotalDays;
+    }
+
+    public void ReturnLoan()
+    {
+        ReturnDate = DateTime.Now;
+        LoanStatus = "Returned";
     }
 }

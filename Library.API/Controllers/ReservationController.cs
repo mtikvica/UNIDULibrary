@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers;
-[Route("[controller]")]
+[Route("reservations")]
 [ApiController]
 public class ReservationController(IReservationService reservationService) : ControllerBase
 {

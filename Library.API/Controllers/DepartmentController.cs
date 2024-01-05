@@ -3,7 +3,7 @@ using Library.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers;
-[Route("[controller]")]
+[Route("departments")]
 [ApiController]
 public class DepartmentController : ControllerBase
 {

@@ -3,7 +3,7 @@ using Library.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers;
-[Route("[controller]")]
+[Route("locations")]
 [ApiController]
 public class LocationController : ControllerBase
 {
