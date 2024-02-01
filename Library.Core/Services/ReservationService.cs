@@ -38,12 +38,6 @@ public class ReservationService(IReservationRepository reservationRepository, IF
 
         var studentReservations = _reservationRepository.GetBy(x => x.StudentId == studentID).Count();
 
-
-        if (studentReservations > Constants.StudentReservationLimit)
-        {
-            throw new LimitExcededException($"Student with id : {studentID} has 3 reservations!");
-        }
-
         var bookCopy = await _bookCopyRepository.GetBy(x => x.BookId == bookId && x.IsAvailable == true && x.IsReserved == false).FirstOrDefaultAsync() ?? throw new Exception($"There are no available book copies!");
 
         bookCopy.ProcessReservation();
