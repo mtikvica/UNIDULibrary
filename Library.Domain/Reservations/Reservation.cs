@@ -1,29 +1,27 @@
 ﻿using Library.Domain.Abstractions;
-using Library.Domain.BookCopies;
 using Library.Domain.Reservations.Events;
 
 namespace Library.Domain.Reservations;
 
 public sealed class Reservation : Entity
 {
-    private Reservation(Guid studentId, Guid bookCopyId)
+    private Reservation(Guid studentId, Guid bookCopyId, DateTime date)
     {
         StudentId = studentId;
         BookCopyId = bookCopyId;
+        DateRange = ReservationDateRange.Create(date);
     }
 
     public Guid StudentId { get; }
     public Guid BookCopyId { get; }
-    public ReservationDateRange DateRange { get; } = ReservationDateRange.Create(DateTime.Now);
+    public ReservationDateRange DateRange { get; }
     public bool IsProcessed { get; private set; }
 
-    public static Reservation Create(Guid studentId, BookCopy bookCopy)
+    public static Reservation Create(Guid studentId, Guid bookCopyId, DateTime date)
     {
-        var reservation = new Reservation(studentId, bookCopy.Id);
+        var reservation = new Reservation(studentId, bookCopyId, date);
 
-        reservation.RaiseDomainEvent(new ReservationCreatedDomainEvent(reservation.Id));
-
-        bookCopy.ProcessReservation();
+        reservation.RaiseDomainEvent(new ReservationCreatedDomainEvent(bookCopyId));
 
         return reservation;
     }

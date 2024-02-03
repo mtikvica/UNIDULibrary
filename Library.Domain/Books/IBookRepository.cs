@@ -1,6 +1,7 @@
 ﻿using Library.Domain.Abstractions;
 
 namespace Library.Domain.Books;
-internal interface IBookRepository : IRepository
+public interface IBookRepository : IRepository
 {
+    Task<Book> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 }

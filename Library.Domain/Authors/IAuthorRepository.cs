@@ -1,7 +1,7 @@
 ﻿namespace Library.Domain.Authors;
 public interface IAuthorRepository
 {
-    Task<Author> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Author> GetByIdAsyncAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Author>> GetAllAsync(CancellationToken cancellationToken = default);
 

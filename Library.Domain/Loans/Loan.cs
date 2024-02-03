@@ -1,29 +1,27 @@
 ﻿using Library.Domain.Abstractions;
-using Library.Domain.BookCopies;
 using Library.Domain.Loans.Event;
 
 namespace Library.Domain.Loans;
 
 public sealed class Loan : Entity
 {
-    private Loan(Guid bookCopyId, Guid studentId)
+    private Loan(Guid bookCopyId, Guid studentId, DateTime date)
     {
         BookCopyId = bookCopyId;
         StudentId = studentId;
+        DateRange = LoanDateRange.Create(date);
     }
 
     public Guid BookCopyId { get; }
     public Guid StudentId { get; }
-    public LoanDateRange DateRange { get; } = LoanDateRange.Create();
+    public LoanDateRange DateRange { get; }
     public LoanStatus LoanStatus { get; private set; }
 
-    public static Loan Create(BookCopy bookCopy, Guid studentId)
+    public static Loan Create(Guid studentId, Guid bookCopyId, DateTime date)
     {
-        var loan = new Loan(bookCopy.Id, studentId);
+        var loan = new Loan(bookCopyId, studentId, date);
 
-        bookCopy.ProcessLoan();
-
-        loan.RaiseDomainEvent(new LoanCreatedDomainEvent(loan.Id));
+        loan.RaiseDomainEvent(new LoanCreatedDomainEvent(bookCopyId));
 
         return loan;
     }

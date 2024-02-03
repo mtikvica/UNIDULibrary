@@ -1,7 +1,7 @@
 ﻿namespace Library.Domain.InventoryStates;
 internal interface IInventoryStateRepository
 {
-    Task<InventoryState> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<InventoryState> GetByIdAsyncAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<InventoryState>> GetAllAsync(CancellationToken cancellationToken = default);
 

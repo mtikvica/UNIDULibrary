@@ -12,9 +12,9 @@ public record LoanDateRange
     public DateOnly EndDate { get; init; }
     public DateOnly? DueDate { get; init; }
 
-    public static LoanDateRange Create()
+    public static LoanDateRange Create(DateTime date)
     {
-        var StartDateTime = DateOnly.FromDateTime(DateTime.Now);
+        var StartDateTime = DateOnly.FromDateTime(date);
 
         var EndDateTime = StartDateTime.AddDays(14);
 

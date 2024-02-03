@@ -7,4 +7,13 @@ public static class ReservationErrors
         "Reservation.Expired",
         "Reservation is expired!"
         );
+
+    public static Error AlreadyReserved = new(
+        "Reservation.AlreadyReserved",
+        "Book is already reserved!");
+
+    public static Error NotFound = new(
+        "Reservation.NotFound",
+        "Reservation not found!"
+        );
 }
