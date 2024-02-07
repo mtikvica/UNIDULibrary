@@ -1,6 +1,6 @@
 ﻿using Library.Domain.Abstractions;
 
 namespace Library.Domain.Students;
-public interface IStudentRepository : IRepository
+public interface IStudentRepository
 {
 }
