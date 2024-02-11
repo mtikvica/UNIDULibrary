@@ -1,14 +1,21 @@
 ﻿using Library.Domain.Abstractions;
-using Library.Domain.Books;
-using Library.Domain.Students;
 
 namespace Library.Domain.Departments;
 
 public sealed class Department : Entity
 {
-    public string DepartmentName { get; } = null!;
+    private Department(string departmentName)
+    {
+        Name = departmentName;
+    }
 
-    public IEnumerable<Book> Books { get; } = new List<Book>();
+    private Department() { }
 
-    public IEnumerable<Student> Students { get; } = new List<Student>();
+    public string Name { get; }
+    public Guid LocationId { get; set; }
+
+    public static Department Create(string departmentName)
+    {
+        return new Department(departmentName);
+    }
 }

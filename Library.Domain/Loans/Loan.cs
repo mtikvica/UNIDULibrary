@@ -12,6 +12,8 @@ public sealed class Loan : Entity
         DateRange = LoanDateRange.Create(date);
     }
 
+    private Loan() { }
+
     public Guid BookCopyId { get; }
     public Guid StudentId { get; }
     public LoanDateRange DateRange { get; }

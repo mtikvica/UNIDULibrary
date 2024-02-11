@@ -1,6 +1,5 @@
-﻿using Library.Domain.Abstractions;
-
-namespace Library.Domain.Loans;
+﻿namespace Library.Domain.Loans;
 public interface ILoanRepository
 {
+    void Add(Loan loan);
 }

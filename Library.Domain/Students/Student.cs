@@ -1,30 +1,28 @@
-﻿using Library.Domain.Loans;
-using Library.Domain.Reservations;
+﻿using Library.Domain.Shared;
 using Library.Domain.Users;
 
 namespace Library.Domain.Students;
 
 public sealed class Student : User
 {
-    private Student(FirstName firstName, LastName lastName, Email email, Password password, Guid roleId, AcademicYear academicYear, Guid departmentId) : base(firstName, lastName, email, password, roleId)
+    private Student(Name firstName, Name lastName, Email email, Password password, AcademicYear academicYear, Guid departmentId) : base(firstName, lastName, email, password)
     {
         AcademicYear = academicYear;
         DepartmentId = departmentId;
     }
 
-    public AcademicYear AcademicYear { get; private set; }
-    public Guid DepartmentId { get; }
-    public IEnumerable<Reservation> Reservation { get; } = new List<Reservation>();
-    public IEnumerable<Loan> Loan { get; } = new List<Loan>();
+    private Student() { }
 
-    public static Student Create(FirstName firstName, LastName lastName, Email email, Password password, Guid roleId, AcademicYear academicYear, Guid departmentId)
+    public AcademicYear AcademicYear { get; }
+    public Guid DepartmentId { get; }
+
+    public static Student Create(Name firstName, Name lastName, Email email, Password password, AcademicYear academicYear, Guid departmentId)
     {
-        return new Student(firstName, lastName, email, password, roleId, academicYear, departmentId);
+        return new Student(firstName, lastName, email, password, academicYear, departmentId);
     }
 
-    public Student NewAcademicYear()
+    public static Student Create(Name name1, Name name2, Email email, Password password)
     {
-        AcademicYear = AcademicYear.Create(AcademicYear.Value + 1);
-        return this;
+        throw new NotImplementedException();
     }
 }

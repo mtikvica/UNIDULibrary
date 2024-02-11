@@ -1,9 +1,6 @@
 ﻿using Library.Domain.Loans;
 
 namespace Library.Infrastructure.Repositories;
-internal class LoanRepository : Repository<Loan>, ILoanRepository
+internal class LoanRepository(LibraryDbContext dbContext) : Repository<Loan>(dbContext), ILoanRepository
 {
-    public LoanRepository(LibraryDbContext dbContext) : base(dbContext)
-    {
-    }
 }

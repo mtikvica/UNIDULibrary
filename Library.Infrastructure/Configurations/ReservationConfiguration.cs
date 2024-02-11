@@ -11,7 +11,7 @@ internal sealed class ReservationConfiguration : IEntityTypeConfiguration<Reserv
     {
         builder.HasKey(reservation => reservation.Id);
 
-        builder.OwnsOne(reservation => reservation.DateRange, dateRange =>
+        builder.ComplexProperty(reservation => reservation.DateRange, dateRange =>
         {
             dateRange.Property(dateRange => dateRange.StartDate).HasColumnName("StartDate");
             dateRange.Property(dateRange => dateRange.EndDate).HasColumnName("EndDate");

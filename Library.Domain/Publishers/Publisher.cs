@@ -1,5 +1,4 @@
 ﻿using Library.Domain.Abstractions;
-using Library.Domain.Books;
 
 namespace Library.Domain.Publishers;
 
@@ -9,8 +8,10 @@ public sealed class Publisher : Entity
     {
         PublisherName = publisherName;
     }
+
+    private Publisher() { }
+
     public string PublisherName { get; } = null!;
-    public ICollection<Book> Books { get; } = new List<Book>();
 
     public static Publisher Create(string publisherName)
     {

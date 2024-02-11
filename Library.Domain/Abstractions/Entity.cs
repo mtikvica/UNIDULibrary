@@ -1,10 +1,11 @@
 ﻿namespace Library.Domain.Abstractions;
 public abstract class Entity
 {
+    protected Entity() { }
+
     private readonly List<IDomainEvent> _domainEvents = [];
 
     public Guid Id { get; init; } = Guid.NewGuid();
-
 
     public IReadOnlyList<IDomainEvent> GetDomainEvents()
     {

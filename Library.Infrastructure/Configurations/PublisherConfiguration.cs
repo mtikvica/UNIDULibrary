@@ -8,7 +8,5 @@ internal sealed class PublisherConfiguration : IEntityTypeConfiguration<Publishe
     public void Configure(EntityTypeBuilder<Publisher> builder)
     {
         builder.HasKey(publisher => publisher.Id);
-
-
     }
 }

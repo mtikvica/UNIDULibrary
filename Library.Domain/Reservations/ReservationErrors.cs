@@ -16,4 +16,9 @@ public static class ReservationErrors
         "Reservation.NotFound",
         "Reservation not found!"
         );
+
+    public static Error NoAvailableCopies = new(
+        "Reservation.NoAvailableCopies",
+        "No available copies of the book for the reservation!"
+        );
 }

@@ -1,20 +1,22 @@
 ﻿using Library.Domain.Abstractions;
-using Library.Domain.Books;
 
 namespace Library.Domain.Locations;
 
-public class Location : Entity
+public sealed class Location : Entity
 {
-    private Location(string locationName)
+    private Location(string street, string city, string country, string zipCode)
     {
-        LocationName = locationName;
+        Address = Address.Create(street, city, country, zipCode);
     }
 
-    public string LocationName { get; }
-    public ICollection<Book> Books { get; } = new List<Book>();
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    private Location() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    public static Location Create(string locationName)
+    public Address Address { get; }
+
+    public static Location Create(string street, string city, string country, string zipCode)
     {
-        return new Location(locationName);
+        return new Location(street, city, country, zipCode);
     }
 }

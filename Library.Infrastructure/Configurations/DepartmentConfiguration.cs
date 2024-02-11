@@ -1,4 +1,5 @@
 ﻿using Library.Domain.Departments;
+using Library.Domain.Locations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,8 +10,11 @@ internal sealed class DepartmentConfiguration : IEntityTypeConfiguration<Departm
     {
         builder.HasKey(department => department.Id);
 
-        builder.HasMany(department => department.Students)
-            .WithOne()
-            .HasForeignKey(student => student.DepartmentId);
+        builder.Property(department => department.Name)
+            .HasColumnName("Name");
+
+        builder.HasOne<Location>()
+            .WithMany()
+            .HasForeignKey(department => department.LocationId);
     }
 }

@@ -14,8 +14,8 @@ internal class LoanCreatedDomainEventHandler(
 
     public async Task Handle(LoanCreatedDomainEvent notification, CancellationToken cancellationToken)
     {
-        var bookCopy = await _bookCopyRepository.GetByIdAsync(notification.BookCopyId, cancellationToken);
-
+        var bookCopy = await _bookCopyRepository.GetByIdAsync(notification.BookCopyId, cancellationToken) ??
+                                throw new InvalidOperationException($"Book copy with id {notification.BookCopyId} not found.");
         bookCopy.ProcessLoan();
 
         _bookCopyRepository.Update(bookCopy);

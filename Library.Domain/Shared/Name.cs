@@ -1,16 +1,16 @@
-﻿namespace Library.Domain.Users;
-public sealed record FirstName
+﻿namespace Library.Domain.Shared;
+public sealed record Name
 {
     public const int MaxLength = 50;
 
     public string Value { get; init; }
 
-    private FirstName(string value)
+    private Name(string value)
     {
         Value = value;
     }
 
-    public static FirstName Create(string value)
+    public static Name Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -21,6 +21,6 @@ public sealed record FirstName
             throw new ArgumentException($"First name cannot be longer than {MaxLength} characters", nameof(value));
         }
 
-        return new FirstName(value);
+        return new Name(value);
     }
 }

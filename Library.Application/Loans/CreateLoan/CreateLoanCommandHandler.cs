@@ -1,5 +1,6 @@
 ﻿using Library.Application.Abstractions.Clock;
 using Library.Application.Abstractions.Messaging;
+using Library.Application.Shared.Fines;
 using Library.Domain.Abstractions;
 using Library.Domain.BookCopies;
 using Library.Domain.Fines;
@@ -9,20 +10,20 @@ namespace Library.Application.Loans.CreateLoan;
 internal sealed class CreateLoanCommandHandler(
     ILoanRepository loanRepository,
     IBookCopyRepository bookCopyRepository,
-    IFineRepository fineService,
+    IFineService fineService,
     IUnitOfWork unitOfWork,
     IDateTimeProvider dateTimeProvider)
     : ICommandHandler<CreateLoanCommand, Guid>
 {
     private readonly ILoanRepository _loanRepository = loanRepository;
     private readonly IBookCopyRepository _bookCopyRepository = bookCopyRepository;
-    private readonly IFineRepository _fineService = fineService;
+    private readonly IFineService _fineService = fineService;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
 
     public async Task<Result<Guid>> Handle(CreateLoanCommand request, CancellationToken cancellationToken)
     {
-        var fines = await _fineService.GetFinesForStudent(request.StudentId, cancellationToken);
+        var fines = await _fineService.GetUnpaidFinesByStundet(request.StudentId);
 
         if (fines is not null)
         {

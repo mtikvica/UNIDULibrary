@@ -11,7 +11,7 @@ internal sealed class LoanConfiguration : IEntityTypeConfiguration<Loan>
     {
         builder.HasKey(loan => loan.Id);
 
-        builder.OwnsOne(loan => loan.DateRange, dateRange =>
+        builder.ComplexProperty(loan => loan.DateRange, dateRange =>
         {
             dateRange.Property(dateRange => dateRange.StartDate).HasColumnName("StartDate");
             dateRange.Property(dateRange => dateRange.EndDate).HasColumnName("EndDate");

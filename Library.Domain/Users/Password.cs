@@ -22,23 +22,23 @@ public sealed record Password
         }
         if (value.Length > MaxLength)
         {
-            throw new ArgumentException($"Password cannot be longer than {MaxLength} characters", nameof(value));
+            throw new ArgumentException("Password cannot be longer than {MaxLength} characters", nameof(value));
         }
         if (value.Length < 8)
         {
-            throw new ArgumentException($"Password cannot be shorter than 8 characters", nameof(value));
+            throw new ArgumentException("Password cannot be shorter than 8 characters", nameof(value));
         }
         if (!value.Any(char.IsUpper))
         {
-            throw new ArgumentException($"Password must contain at least one uppercase letter", nameof(value));
+            throw new ArgumentException("Password must contain at least one uppercase letter", nameof(value));
         }
         if (!value.Any(char.IsLower))
         {
-            throw new ArgumentException($"Password must contain at least one lowercase letter", nameof(value));
+            throw new ArgumentException("Password must contain at least one lowercase letter", nameof(value));
         }
         if (!value.Any(char.IsDigit))
         {
-            throw new ArgumentException($"Password must contain at least one digit", nameof(value));
+            throw new ArgumentException("Password must contain at least one digit", nameof(value));
         }
 
         return new Password(HashPassword(value));

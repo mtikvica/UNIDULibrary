@@ -1,19 +1,19 @@
 ﻿using Library.Domain.Abstractions;
-using Library.Domain.Authors;
 using Library.Domain.Books.Events;
 
 namespace Library.Domain.Books;
 
 public sealed class Book : Entity
 {
-    private Book(string title, string isbn, int? publicationYear, int? numberOfPages, IEnumerable<Author> authors)
+    private Book(string title, string isbn, int? publicationYear, int? numberOfPages)
     {
         Title = title;
         Isbn = isbn;
         PublicationYear = publicationYear;
         NumberOfPages = numberOfPages;
-        Authors = authors;
     }
+
+    private Book() { }
 
     public string Title { get; }
 
@@ -29,11 +29,9 @@ public sealed class Book : Entity
 
     public int? PublicationYear { get; private set; }
 
-    public IEnumerable<Author> Authors { get; } = new List<Author>();
-
-    public static Book Create(string title, string isbn, int? publicationYear, int? numberOfPages, IEnumerable<Author> authors)
+    public static Book Create(string title, string isbn, int? publicationYear, int? numberOfPages)
     {
-        var book = new Book(title, isbn, publicationYear, numberOfPages, authors);
+        var book = new Book(title, isbn, publicationYear, numberOfPages);
 
         book.RaiseDomainEvent(new BookCreatedDomainEvent(book.Id));
 

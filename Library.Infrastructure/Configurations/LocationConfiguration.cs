@@ -1,5 +1,4 @@
-﻿using Library.Domain.Books;
-using Library.Domain.Locations;
+﻿using Library.Domain.Locations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,8 +9,12 @@ internal sealed class LocationConfiguration : IEntityTypeConfiguration<Location>
     {
         builder.HasKey(location => location.Id);
 
-        builder.HasMany<Book>()
-            .WithOne()
-            .HasForeignKey(book => book.LocationId);
+        builder.ComplexProperty(location => location.Address, address =>
+        {
+            address.Property(address => address.Street).HasColumnName("Street");
+            address.Property(address => address.City).HasColumnName("City");
+            address.Property(address => address.ZipCode).HasColumnName("ZipCode");
+            address.Property(address => address.Country).HasColumnName("Country");
+        });
     }
 }

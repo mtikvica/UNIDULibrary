@@ -1,5 +1,4 @@
-﻿using Library.Data.Exceptions;
-using System.Net;
+﻿using System.Net;
 
 namespace Library.API.Middlewares;
 
@@ -31,7 +30,6 @@ public class ExceptionHandlingMiddleware
         var response = exception switch
         {
             ApplicationException _ => new ExceptionResponse((int)HttpStatusCode.BadRequest, exception.Message),
-            NotFoundException _ => new ExceptionResponse((int)HttpStatusCode.NotFound, exception.Message),
             _ => new ExceptionResponse((int)HttpStatusCode.InternalServerError, exception.Message, exception.InnerException?.Message),
         };
 

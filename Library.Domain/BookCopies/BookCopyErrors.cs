@@ -12,4 +12,9 @@ public static class BookCopyErrors
                "BookCopy.NotAvailableForLoan",
                       "Book copy is not available for loan!"
                );
+
+    public static Error NotFound = new(
+                      "BookCopy.NotFound",
+                        "Book copy not found!"
+                      );
 }

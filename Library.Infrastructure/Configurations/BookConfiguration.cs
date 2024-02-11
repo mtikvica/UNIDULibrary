@@ -1,5 +1,6 @@
 ﻿using Library.Domain.Authors;
 using Library.Domain.Books;
+using Library.Domain.Departments;
 using Library.Domain.Locations;
 using Library.Domain.Publishers;
 using Microsoft.EntityFrameworkCore;
@@ -22,5 +23,9 @@ internal sealed class BookConfiguration : IEntityTypeConfiguration<Book>
         builder.HasOne<Publisher>()
             .WithMany()
             .HasForeignKey(book => book.PublisherId);
+
+        builder.HasOne<Department>()
+            .WithMany()
+            .HasForeignKey(book => book.DepartmentId);
     }
 }

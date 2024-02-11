@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Library.Application;
 public static class DependencyInjection
 {
-    public static IServiceCollection AddAplication(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(configuration =>
         {
@@ -14,7 +14,7 @@ public static class DependencyInjection
             configuration.AddOpenBehavior(typeof(LoggingBehavior<,>));
         });
 
-        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, includeInternalTypes: true);
 
         return services;
     }

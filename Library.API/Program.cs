@@ -1,7 +1,8 @@
 using Library.API.Extensions;
 using Library.API.Middlewares;
-using Library.Core.BackgroundServices;
-using Library.Core.DependencyInjection;
+using Library.API.SeedData;
+using Library.Application;
+using Library.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,11 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.ConfigureHttpClient();
-builder.Services.AddRepositories();
-builder.Services.AddCoreServices();
-builder.Services.AddContext();
-builder.Services.AddHostedService<ReservationBackgroundService>();
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -24,6 +22,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigrations();
+
+    app.SeedData();
 }
 
 app.UseHttpsRedirection();

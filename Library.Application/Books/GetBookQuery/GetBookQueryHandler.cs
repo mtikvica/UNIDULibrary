@@ -1,22 +1,35 @@
-﻿using Library.Application.Abstractions.Messaging;
+﻿using Dapper;
+using Library.Application.Abstractions.Data;
+using Library.Application.Abstractions.Messaging;
 using Library.Domain.Abstractions;
-using Library.Domain.Books;
 
 namespace Library.Application.Books.GetBookQuery;
-internal sealed class GetBookQueryHandler : IQueryHandler<GetBookQuery, BookResponse>
+internal sealed class GetBookQueryHandler(ISqlConnectionFactory sqlConnectionFactory) : IQueryHandler<GetBookQuery, BookResponse>
 {
-    private readonly IBookRepository _bookRepository;
+    private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
 
     public async Task<Result<BookResponse>> Handle(GetBookQuery request, CancellationToken cancellationToken)
     {
-        var book = await _bookRepository.GetByIdAsync(request.BookId, cancellationToken);
-        if (book is null)
-        {
-            return Result.Failure<BookResponse>(BookErrors.NotFound);
-        }
+        using var connection = _sqlConnectionFactory.CreateConnection();
 
-        var response = BookResponse.Create(book);
+        const string sql = """
+            SELECT
+                b.[Id],
+                b.[Title],
+                b.[Pages],
+                b.[Publisher],
+                b.[PublicationYear],
+                b.[ISBN],
+                a.[Id],
+                a.[FirstName],
+                a.[LastName]
+                FROM [Book] AS b
+                INNER JOIN [BookAuthor] AS ba ON ba.[BookId] = b.[Id]
+                JOIN [Author] AS a ON a.[Id] = ba.[AuthorId]
+                WHERE b.[Id] = @BookId
+            """;
 
-        return Result.Success(response);
+        return await connection.QuerySingleOrDefaultAsync<BookResponse>(sql,
+                new { request.BookId });
     }
 }

@@ -12,6 +12,8 @@ public sealed class Reservation : Entity
         DateRange = ReservationDateRange.Create(date);
     }
 
+    private Reservation() { }
+
     public Guid StudentId { get; }
     public Guid BookCopyId { get; }
     public ReservationDateRange DateRange { get; }

@@ -1,5 +1,4 @@
 ﻿using Library.Domain.Abstractions;
-using Library.Domain.Loans;
 
 namespace Library.Domain.BookCopies;
 
@@ -10,10 +9,11 @@ public sealed class BookCopy : Entity
         BookId = bookId;
     }
 
+    private BookCopy() { }
+
     public Guid BookId { get; }
     public bool IsAvailable { get; private set; } = true;
     public bool IsReserved { get; private set; }
-    public ICollection<Loan> Loans { get; } = new List<Loan>();
 
     public void ProcessReservation()
     {
