@@ -1,5 +1,4 @@
-﻿using Library.Domain.Authors;
-using Library.Domain.Books;
+﻿using Library.Domain.Books;
 using Library.Domain.Departments;
 using Library.Domain.Locations;
 using Library.Domain.Publishers;
@@ -13,8 +12,8 @@ internal sealed class BookConfiguration : IEntityTypeConfiguration<Book>
     {
         builder.HasKey(book => book.Id);
 
-        builder.HasMany<Author>()
-            .WithMany();
+        builder.Property(book => book.Title)
+            .HasColumnName("Title");
 
         builder.HasOne<Location>()
             .WithMany()
@@ -27,5 +26,7 @@ internal sealed class BookConfiguration : IEntityTypeConfiguration<Book>
         builder.HasOne<Department>()
             .WithMany()
             .HasForeignKey(book => book.DepartmentId);
+
+        builder.HasIndex(book => book.Isbn).IsUnique();
     }
 }

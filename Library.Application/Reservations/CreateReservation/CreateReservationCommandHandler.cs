@@ -1,6 +1,5 @@
 ﻿using Library.Application.Abstractions.Clock;
 using Library.Application.Abstractions.Messaging;
-using Library.Application.Shared.Fines;
 using Library.Domain.Abstractions;
 using Library.Domain.BookCopies;
 using Library.Domain.Fines;
@@ -8,20 +7,20 @@ using Library.Domain.Reservations;
 
 namespace Library.Application.Reservations.CreateReservation;
 internal class CreateReservationCommandHandler(IReservationRepository reservationRepository,
-    IFineService fineRepository,
+    IFineRepository fineRepository,
     IUnitOfWork unitOfWork,
     IDateTimeProvider dateTimeProvider,
     IBookCopyRepository bookCopyRepository) : ICommandHandler<CreateReservationCommand, Guid>
 {
     private readonly IReservationRepository _reservationRepository = reservationRepository;
-    private readonly IFineService _fineService = fineRepository;
+    private readonly IFineRepository _fineRepository = fineRepository;
     private readonly IBookCopyRepository _bookCopyRepository = bookCopyRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
 
     public async Task<Result<Guid>> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
     {
-        var fines = await _fineService.GetUnpaidFinesByStundet(request.StudentId);
+        var fines = await _fineRepository.GetUnpaidFinesByStundet(request.StudentId);
 
         if (fines.Any())
         {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Library.Core.Responses.OpenLibraryModels;
+namespace Library.Application.Abstractions.OpenLibrary.Responses;
 public class OpenLibraryBookResponse
 {
     public string Title { get; set; } = string.Empty;
@@ -16,4 +16,9 @@ public class OpenLibraryBookResponse
 
     [JsonProperty("isbn_10")]
     public List<string> Isbn10 { get; set; } = [];
+}
+
+public class AuthorCodes
+{
+    public string Key { get; set; } = null!;
 }

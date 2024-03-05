@@ -21,7 +21,7 @@ public sealed class LibraryDbContext(DbContextOptions<LibraryDbContext> options,
         {
             var result = await base.SaveChangesAsync(cancellationToken);
 
-            await PublishDomainEventAsync();
+            await PublishDomainEventsAsync();
 
             return await base.SaveChangesAsync(cancellationToken);
         }
@@ -31,7 +31,7 @@ public sealed class LibraryDbContext(DbContextOptions<LibraryDbContext> options,
         }
     }
 
-    private async Task PublishDomainEventAsync()
+    private async Task PublishDomainEventsAsync()
     {
         var domaninEvents = ChangeTracker.Entries<Entity>()
             .Select(entry => entry.Entity)

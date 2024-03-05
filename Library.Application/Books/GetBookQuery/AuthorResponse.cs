@@ -2,5 +2,5 @@
 
 public class AuthorResponse
 {
-    public required string Name { get; init; }
+    public required string AuthorName { get; init; }
 }

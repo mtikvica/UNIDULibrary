@@ -1,8 +1,7 @@
-﻿using Library.Domain.Abstractions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Library.Infrastructure.Repositories;
-public abstract class Repository<T> where T : Entity
+internal abstract class Repository<T> where T : class
 {
     protected readonly LibraryDbContext _dbContext;
     protected readonly DbSet<T> _dbSet;
@@ -10,7 +9,6 @@ public abstract class Repository<T> where T : Entity
     {
         _dbContext = dbContext;
         _dbSet = dbContext.Set<T>();
-
     }
 
     public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -20,7 +18,7 @@ public abstract class Repository<T> where T : Entity
 
     public async Task<List<T>> GetAllAsync()
     {
-        return await _dbSet.ToListAsync();
+        return await _dbSet.AsNoTracking().ToListAsync();
     }
 
     public void Add(T entity)

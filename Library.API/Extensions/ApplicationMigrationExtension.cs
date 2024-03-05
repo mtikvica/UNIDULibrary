@@ -10,7 +10,7 @@ public static class ApplicationMigrationExtension
         using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
 
         using var context = serviceScope.ServiceProvider.GetRequiredService<LibraryDbContext>();
-
+        context.Database.EnsureCreated();
         context.Database.Migrate();
     }
 }

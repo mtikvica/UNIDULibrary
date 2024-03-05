@@ -23,5 +23,7 @@ internal sealed class AuthorConfiguration : IEntityTypeConfiguration<Author>
         {
             name.Property(name => name.Value).HasColumnName("MiddleName");
         });
+
+        builder.HasIndex(author => author.OpenLibraryAuthorCode).IsUnique();
     }
 }

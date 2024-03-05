@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library.Infrastructure.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    [Migration("20240211225708_Create_Database")]
-    partial class Create_Database
+    [Migration("20240305204623_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,17 +26,17 @@ namespace Library.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AuthorBook", b =>
+            modelBuilder.Entity("Library.Domain.AuthorBooks.AuthorBook", b =>
                 {
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("AuthorId", "BookId");
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("BookId");
+                    b.HasKey("BookId", "AuthorId");
+
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("AuthorBook");
                 });
@@ -46,6 +46,10 @@ namespace Library.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OpenLibraryAuthorCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.ComplexProperty<Dictionary<string, object>>("FirstName", "Library.Domain.Authors.Author.FirstName#Name", b1 =>
                         {
@@ -68,6 +72,9 @@ namespace Library.Infrastructure.Migrations
                         });
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OpenLibraryAuthorCode")
+                        .IsUnique();
 
                     b.ToTable("Author");
                 });
@@ -103,6 +110,10 @@ namespace Library.Infrastructure.Migrations
                     b.Property<Guid?>("DepartmentId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Isbn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid?>("LocationId")
                         .HasColumnType("uniqueidentifier");
 
@@ -115,9 +126,17 @@ namespace Library.Infrastructure.Migrations
                     b.Property<Guid?>("PublisherId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Title");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("Isbn")
+                        .IsUnique();
 
                     b.HasIndex("LocationId");
 
@@ -302,7 +321,14 @@ namespace Library.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("PublisherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PublisherName")
+                        .IsUnique();
 
                     b.ToTable("Publisher");
                 });
@@ -382,7 +408,7 @@ namespace Library.Infrastructure.Migrations
                     b.ToTable("Student");
                 });
 
-            modelBuilder.Entity("AuthorBook", b =>
+            modelBuilder.Entity("Library.Domain.AuthorBooks.AuthorBook", b =>
                 {
                     b.HasOne("Library.Domain.Authors.Author", null)
                         .WithMany()

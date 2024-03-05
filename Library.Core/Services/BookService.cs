@@ -71,13 +71,12 @@ public class BookService(IBookRepository bookRepository, IPublisherRepository pu
             x => x.Publisher
         };
 
-
         var books = await _bookRepository.GetAllWithIncludesAsync(includes).Paginate(request.PageNumber, request.PageSize).ToListAsync();
         return new PaginatedResponse
         {
             PageNumber = request.PageNumber,
             PageSize = request.PageSize,
-            TotalPages = (int)Math.Ceiling(books.Count() / (double)request.PageSize),
+            TotalPages = (int)Math.Ceiling(books.Count / (double)request.PageSize),
             Records = books.Select(x => _mapper.Map<BookResponse>(x))
         };
     }

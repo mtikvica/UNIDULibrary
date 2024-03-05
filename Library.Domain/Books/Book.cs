@@ -1,16 +1,16 @@
 ﻿using Library.Domain.Abstractions;
-using Library.Domain.Books.Events;
 
 namespace Library.Domain.Books;
 
 public sealed class Book : Entity
 {
-    private Book(string title, string isbn, int? publicationYear, int? numberOfPages)
+    private Book(string title, string isbn, int? publicationYear, int? numberOfPages, Guid publisherId)
     {
         Title = title;
         Isbn = isbn;
         PublicationYear = publicationYear;
         NumberOfPages = numberOfPages;
+        PublisherId = publisherId;
     }
 
     private Book() { }
@@ -29,13 +29,12 @@ public sealed class Book : Entity
 
     public int? PublicationYear { get; private set; }
 
-    public static Book Create(string title, string isbn, int? publicationYear, int? numberOfPages)
+    public static Book CreateFromOpenLibrary(string title, string isbn, string? publishDate, int? numberOfPages, Guid publisherId, IEnumerable<Guid> authorIds)
     {
-        var book = new Book(title, isbn, publicationYear, numberOfPages);
-
-        book.RaiseDomainEvent(new BookCreatedDomainEvent(book.Id));
-
-        return book;
+        return new Book(title,
+                            isbn,
+                            int.TryParse(publishDate, out var publicationYear) ? publicationYear : null,
+                            numberOfPages, publisherId);
     }
 
     public Book UpdateWithMissingProperties(int numberOfPages, Guid departmentId, Guid publisherId, Guid locationId)

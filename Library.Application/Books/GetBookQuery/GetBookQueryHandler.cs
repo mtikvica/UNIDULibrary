@@ -13,23 +13,31 @@ internal sealed class GetBookQueryHandler(ISqlConnectionFactory sqlConnectionFac
         using var connection = _sqlConnectionFactory.CreateConnection();
 
         const string sql = """
-            SELECT
-                b.[Id],
-                b.[Title],
-                b.[Pages],
-                b.[Publisher],
-                b.[PublicationYear],
-                b.[ISBN],
-                a.[Id],
-                a.[FirstName],
-                a.[LastName]
-                FROM [Book] AS b
-                INNER JOIN [BookAuthor] AS ba ON ba.[BookId] = b.[Id]
-                JOIN [Author] AS a ON a.[Id] = ba.[AuthorId]
-                WHERE b.[Id] = @BookId
+              SELECT
+                 b.[Id],
+                 b.[Title],
+                 b.[NumberOfPages],
+                 p.[PublisherName],
+                 b.[PublicationYear],
+                 b.[ISBN],
+                 a.[FirstName] + ' ' + a.[LastName] AS 'AuthorName'
+                 FROM [Book] AS b
+                 INNER JOIN [AuthorBook] AS ab ON ab.[BookId] = b.[Id]
+                 JOIN [Author] AS a ON a.[Id] = ab.[AuthorId]
+            	 JOIN [Publisher] as p ON b.PublisherId = p.Id
+                 WHERE b.[Id] = @BookId
             """;
 
-        return await connection.QuerySingleOrDefaultAsync<BookResponse>(sql,
-                new { request.BookId });
+        var gdgasd = await connection.QueryFirstAsync<BookResponse>(sql, new { request.BookId });
+
+        var book = await connection.QueryAsync<BookResponse, AuthorResponse, BookResponse>(sql, (book, author) =>
+        {
+            book.Authors.Add(author);
+            return book;
+        },
+        new { request.BookId },
+        splitOn: "AuthorName");
+
+        return book.FirstOrDefault();
     }
 }

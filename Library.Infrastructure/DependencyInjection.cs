@@ -1,14 +1,18 @@
 ﻿using Library.Application.Abstractions.Clock;
 using Library.Application.Abstractions.Data;
-using Library.Application.Shared.Fines;
+using Library.Application.Abstractions.OpenLibrary;
 using Library.Domain.Abstractions;
+using Library.Domain.AuthorBooks;
+using Library.Domain.Authors;
 using Library.Domain.BookCopies;
+using Library.Domain.Books;
 using Library.Domain.Fines;
 using Library.Domain.Loans;
+using Library.Domain.Publishers;
 using Library.Domain.Reservations;
 using Library.Infrastructure.Clock;
 using Library.Infrastructure.Data;
-using Library.Infrastructure.Fines;
+using Library.Infrastructure.OpenLibrary;
 using Library.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +36,12 @@ public static class DependencyInjection
         services.AddScoped<ILoanRepository, LoanRepository>();
         services.AddScoped<IBookCopyRepository, BookCopyRepository>();
         services.AddScoped<IFineRepository, FineRepository>();
-        services.AddScoped<IFineService, FineService>();
+        services.AddScoped<IPublisherRepository, PublisherRepository>();
+        services.AddScoped<IBookRepository, BookRepository>();
+        services.AddScoped<IAuthorRepository, AuthorRepository>();
+        services.AddScoped<IAuthorBookRepository, AuthorBookRepository>();
+
+        services.AddScoped<IOpenLibraryService, OpenLibraryService>();
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<LibraryDbContext>());
 
         services.AddSingleton<ISqlConnectionFactory>(_ => new SqlConnectionFactory(connectionString));

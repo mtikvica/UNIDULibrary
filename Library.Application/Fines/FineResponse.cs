@@ -1,4 +1,4 @@
-﻿namespace Library.Application.Shared.Fines;
+﻿namespace Library.Application.Fines;
 
 public class FineResponse
 {
