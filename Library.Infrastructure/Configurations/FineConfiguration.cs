@@ -10,6 +10,15 @@ internal class FineConfiguration : IEntityTypeConfiguration<Fine>
     {
         builder.HasKey(fine => fine.Id);
 
+        builder.Property(fine => fine.Amount)
+            .IsRequired().HasColumnName("Amount");
+
+        builder.Property(fine => fine.IssueDate)
+            .IsRequired().HasColumnName("IssueDate");
+
+        builder.Property(fine => fine.IsPaid)
+            .HasColumnName("IsPaid");
+
         builder.HasOne<Loan>()
             .WithOne()
             .HasForeignKey<Fine>(fine => fine.LoanId);

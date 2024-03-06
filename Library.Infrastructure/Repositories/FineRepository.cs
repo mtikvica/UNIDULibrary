@@ -10,19 +10,17 @@ internal class FineRepository(LibraryDbContext dbContext, ISqlConnectionFactory 
 
     public async Task<IEnumerable<Fine>> GetUnpaidFinesByStundet(Guid studentId, CancellationToken cancellationToken = default)
     {
-        var connection = _sqlConnectionFactory.CreateConnection();
-
-        connection.Open();
+        using var connection = _sqlConnectionFactory.CreateConnection();
 
         const string sql = """
             SELECT
                 f.[Id],
                 f.[Amount],
-                f.[DueDate],
+                f.[IssueDate],
                 f.[IsPaid]
                 FROM [Fine] AS f
                 JOIN [Loan] AS l ON l.[Id] = f.[LoanId]
-                WHERE l.[StudentId] = @studentId
+            WHERE l.[StudentId] = @studentId
                 AND f.[IsPaid] = 0
             """;
 

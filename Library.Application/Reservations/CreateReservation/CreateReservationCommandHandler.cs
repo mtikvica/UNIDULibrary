@@ -20,7 +20,7 @@ internal class CreateReservationCommandHandler(IReservationRepository reservatio
 
     public async Task<Result<Guid>> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
     {
-        var fines = await _fineRepository.GetUnpaidFinesByStundet(request.StudentId);
+        var fines = await _fineRepository.GetUnpaidFinesByStundet(request.StudentId, cancellationToken);
 
         if (fines.Any())
         {
@@ -44,6 +44,10 @@ internal class CreateReservationCommandHandler(IReservationRepository reservatio
         var reservation = Reservation.Create(request.StudentId, bookCopy.Id, _dateTimeProvider.UtcNow);
 
         _reservationRepository.Add(reservation);
+
+        bookCopy.ProcessReservation();
+
+        _bookCopyRepository.Update(bookCopy);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

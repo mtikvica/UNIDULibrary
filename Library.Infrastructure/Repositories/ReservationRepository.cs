@@ -6,7 +6,9 @@ internal class ReservationRepository(LibraryDbContext dbContext) : Repository<Re
 {
     public Task<Reservation?> GetActiveReservationOnBookAsync(Guid studentId, Guid bookId)
     {
-        return _dbSet.Include(reservation => reservation.DateRange)
+        return _dbSet
+            .Where(reservation => reservation.DateRange.StartDate <= DateTime.Now)
+            .Where(reservation => reservation.DateRange.EndDate >= DateTime.Now)
             .Where(reservation => reservation.StudentId == studentId)
             .Where(reservation => reservation.BookCopyId == bookId)
             .Where(reservation => !reservation.IsProcessed)

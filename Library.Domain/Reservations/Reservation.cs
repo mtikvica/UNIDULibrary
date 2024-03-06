@@ -1,5 +1,4 @@
 ﻿using Library.Domain.Abstractions;
-using Library.Domain.Reservations.Events;
 
 namespace Library.Domain.Reservations;
 
@@ -21,11 +20,7 @@ public sealed class Reservation : Entity
 
     public static Reservation Create(Guid studentId, Guid bookCopyId, DateTime date)
     {
-        var reservation = new Reservation(studentId, bookCopyId, date);
-
-        reservation.RaiseDomainEvent(new ReservationCreatedDomainEvent(bookCopyId));
-
-        return reservation;
+        return new Reservation(studentId, bookCopyId, date);
     }
 
     public Result Expired()

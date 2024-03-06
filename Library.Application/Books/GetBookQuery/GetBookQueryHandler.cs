@@ -2,6 +2,7 @@
 using Library.Application.Abstractions.Data;
 using Library.Application.Abstractions.Messaging;
 using Library.Domain.Abstractions;
+using Library.Domain.Books;
 
 namespace Library.Application.Books.GetBookQuery;
 internal sealed class GetBookQueryHandler(ISqlConnectionFactory sqlConnectionFactory) : IQueryHandler<GetBookQuery, BookResponse>
@@ -28,8 +29,6 @@ internal sealed class GetBookQueryHandler(ISqlConnectionFactory sqlConnectionFac
                  WHERE b.[Id] = @BookId
             """;
 
-        var gdgasd = await connection.QueryFirstAsync<BookResponse>(sql, new { request.BookId });
-
         var book = await connection.QueryAsync<BookResponse, AuthorResponse, BookResponse>(sql, (book, author) =>
         {
             book.Authors.Add(author);
@@ -37,6 +36,11 @@ internal sealed class GetBookQueryHandler(ISqlConnectionFactory sqlConnectionFac
         },
         new { request.BookId },
         splitOn: "AuthorName");
+
+        if (!book.Any())
+        {
+            return Result.Failure<BookResponse>(BookErrors.NotFound);
+        }
 
         return book.FirstOrDefault();
     }
