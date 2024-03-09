@@ -7,7 +7,7 @@ internal class BookCopyRepository(LibraryDbContext dbContext) : Repository<BookC
     public async Task<BookCopy?> GetAvailableBookCopyForLoanAsync(Guid bookId, CancellationToken cancellationToken = default)
     {
         return await _dbSet
-            .FirstOrDefaultAsync(bc => bc.BookId == bookId && bc.IsAvailable, cancellationToken);
+            .FirstOrDefaultAsync(bc => bc.BookId == bookId && bc.IsAvailable && !bc.IsReserved, cancellationToken);
     }
 
     public async Task<BookCopy?> GetAvailableBookCopyForReservationAsync(Guid bookId, CancellationToken cancellationToken = default)

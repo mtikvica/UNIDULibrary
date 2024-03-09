@@ -26,11 +26,7 @@ public sealed class BookCopy : Entity
 
     public void ProcessLoan()
     {
-        if (IsAvailable)
-        {
-            IsAvailable = false;
-        }
-        IsAvailable = true;
+        IsAvailable = !IsAvailable;
     }
 
     public static BookCopy Create(Guid bookId)

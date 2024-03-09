@@ -1,6 +1,7 @@
 using HealthChecks.UI.Client;
 using Library.API.Extensions;
 using Library.API.Middlewares;
+using Library.API.SeedData;
 using Library.Application;
 using Library.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -28,9 +29,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    //app.ApplyMigrations();
+    app.ApplyMigrations();
 
-    //app.SeedData();
+    app.SeedData();
 }
 
 app.UseHttpsRedirection();
