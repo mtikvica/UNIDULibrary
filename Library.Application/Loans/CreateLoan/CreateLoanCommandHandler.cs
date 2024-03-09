@@ -24,9 +24,16 @@ internal sealed class CreateLoanCommandHandler(
     {
         var fines = await _fineRepository.GetUnpaidFinesByStundet(request.StudentId, cancellationToken);
 
-        if (fines is not null)
+        if (fines.Any())
         {
             return Result.Failure<Guid>(FineErrors.AlreadyFined);
+        }
+
+        var studentAlreadyHasLoanOnABook = await _loanRepository.GetActiveLoanOnBookAsync(request.StudentId, request.BookId);
+
+        if (studentAlreadyHasLoanOnABook is not null)
+        {
+            return Result.Failure<Guid>(LoanErrors.AlreadyLoaned);
         }
 
         var bookCopy = await _bookCopyRepository.GetAvailableBookCopyForLoanAsync(request.BookId, cancellationToken);

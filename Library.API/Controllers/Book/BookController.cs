@@ -20,11 +20,11 @@ public class BookController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateBook(CreateBookCommand command)
+    public async Task<IActionResult> CreateBook([FromBody] CreateBookWithIsbnRequest request)
     {
-        var bookId = await _mediator.Send(command);
+        var bookCommand = new CreateBookCommand(request.Isbn);
+        var bookId = await _mediator.Send(bookCommand);
 
-        return CreatedAtAction(nameof(GetBook), new { id = bookId }, bookId);
+        return CreatedAtAction(nameof(CreateBook), new { id = bookId }, bookId);
     }
-
 }

@@ -35,9 +35,4 @@ internal abstract class Repository<T> where T : class
     {
         _dbSet.Remove(entity);
     }
-
-    public async Task SaveChangesAsync()
-    {
-        await _dbContext.SaveChangesAsync();
-    }
 }

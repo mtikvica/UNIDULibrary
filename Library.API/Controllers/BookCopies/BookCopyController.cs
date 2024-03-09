@@ -10,9 +10,9 @@ public class BookCopyController(IMediator mediator) : ControllerBase
     private readonly IMediator _mediator = mediator;
 
     [HttpPost]
-    public async Task<IActionResult> CreateBookCopies(Guid bookId, int ammount)
+    public async Task<IActionResult> CreateBookCopies([FromBody] CreateBookCopyRequest request)
     {
-        var command = new CreateBookCopyCommand(bookId, ammount);
+        var command = new CreateBookCopyCommand(request.BookId, request.Ammount);
 
         await _mediator.Send(command);
 
