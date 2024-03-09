@@ -267,17 +267,16 @@ namespace Library.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<DateOnly>("DueDate")
-                                .HasColumnType("date")
-                                .HasColumnName("DueDate");
+                            b1.Property<DateOnly?>("DueDate")
+                                .HasColumnType("date");
 
-                            b1.Property<DateOnly>("LoanedDate")
+                            b1.Property<DateOnly>("EndDate")
                                 .HasColumnType("date")
-                                .HasColumnName("LoanedDate");
+                                .HasColumnName("EndDate");
 
-                            b1.Property<DateOnly?>("ReturnedDate")
+                            b1.Property<DateOnly>("StartDate")
                                 .HasColumnType("date")
-                                .HasColumnName("ReturnedDate");
+                                .HasColumnName("StartDate");
                         });
 
                     b.HasKey("Id");

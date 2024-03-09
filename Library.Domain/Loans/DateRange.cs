@@ -2,36 +2,32 @@
 
 public record LoanDateRange
 {
-    private LoanDateRange(DateOnly loanedDate, DateOnly dueDate)
+    private LoanDateRange(DateOnly startDate, DateOnly endDate)
     {
-        LoanedDate = loanedDate;
-        DueDate = dueDate;
+        StartDate = startDate;
+        EndDate = endDate;
     }
 
-    public DateOnly LoanedDate { get; init; }
-    public DateOnly? ReturnedDate { get; set; }
-    public DateOnly DueDate { get; init; }
+    public DateOnly StartDate { get; init; }
+    public DateOnly EndDate { get; init; }
+    public DateOnly? DueDate { get; init; }
 
     public static LoanDateRange Create(DateTime date)
     {
-        var loanedDateTime = DateOnly.FromDateTime(date);
+        var StartDateTime = DateOnly.FromDateTime(date);
 
-        var dueDateTime = loanedDateTime.AddDays(14);
+        var EndDateTime = StartDateTime.AddDays(14);
 
-        return new LoanDateRange(loanedDateTime, dueDateTime);
+        return new LoanDateRange(StartDateTime, EndDateTime);
     }
 
-    public bool IsOverdue()
+    public bool Overlaps(LoanDateRange dateRange)
     {
-        if (ReturnedDate is not null)
-        {
-            return DueDate < ReturnedDate;
-        }
-        return false;
+        return StartDate < dateRange.EndDate && dateRange.StartDate < EndDate;
     }
 
     public bool Contains(DateOnly date)
     {
-        return LoanedDate <= date && date <= ReturnedDate;
+        return StartDate <= date && date <= EndDate;
     }
 }

@@ -15,14 +15,4 @@ public static class LoanErrors
                 "Loan.Overdue",
                 "Loan is overdue!"
                );
-
-    public static Error AlreadyLoaned = new(
-        "Loan.AlreadyLoaned",
-        "Book is already loaned!"
-    );
-
-    public static Error NotFound = new(
-               "Loan.NotFound",
-                      "Loan not found!"
-           );
 }

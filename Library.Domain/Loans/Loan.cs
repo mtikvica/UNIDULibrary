@@ -28,19 +28,14 @@ public sealed class Loan : Entity
         return loan;
     }
 
-    public int CalculateOverdueDays(DateOnly date)
+    public bool IsOverdue()
     {
-        if (DateRange.IsOverdue())
-        {
-            return date.DayNumber - DateRange.DueDate.DayNumber;
-        }
-        return 0;
+        return DateRange.DueDate < DateRange.EndDate;
     }
 
-    public Loan Return(DateOnly returnDate)
+    public Loan Return()
     {
         LoanStatus = LoanStatus.Returned;
-        DateRange.ReturnedDate = returnDate;
         return this;
     }
 }
