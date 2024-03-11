@@ -46,6 +46,14 @@ public static class DependencyInjection
 
         services.AddSingleton<ISqlConnectionFactory>(_ => new SqlConnectionFactory(connectionString));
 
+        services.AddHealthChecks(configuration);
+
         return services;
+    }
+
+    public static void AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddHealthChecks()
+            .AddSqlServer(configuration.GetConnectionString("Database")!);
     }
 }

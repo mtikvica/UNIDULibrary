@@ -1,7 +1,9 @@
+using HealthChecks.UI.Client;
 using Library.API.Extensions;
 using Library.API.Middlewares;
 using Library.Application;
 using Library.Infrastructure;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,5 +36,10 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();
