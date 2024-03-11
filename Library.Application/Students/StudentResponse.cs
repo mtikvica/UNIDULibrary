@@ -1,4 +1,4 @@
-﻿namespace Library.Application.Students.GetStudentQuery;
+﻿namespace Library.Application.Students;
 public sealed class StudentResponse
 {
     public Guid Id { get; init; }
