@@ -29,7 +29,7 @@ public sealed class Book : Entity
 
     public int? PublicationYear { get; private set; }
 
-    public static Book CreateFromOpenLibrary(string title, string isbn, string? publishDate, int? numberOfPages, Guid publisherId, IEnumerable<Guid> authorIds)
+    public static Book CreateFromOpenLibrary(string title, string isbn, string? publishDate, int? numberOfPages, Guid publisherId)
     {
         return new Book(title,
                             isbn,

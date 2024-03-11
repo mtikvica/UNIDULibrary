@@ -2,16 +2,11 @@
 
 namespace Library.API.Middlewares;
 
-public class ExceptionHandlingMiddleware
+public class ExceptionHandlingMiddleware(RequestDelegate next)
 {
     private record ExceptionResponse(int StatusCode, string Message, string? InnerExceptionMessage = null);
 
-    private readonly RequestDelegate _next;
-
-    public ExceptionHandlingMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
+    private readonly RequestDelegate _next = next;
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -34,7 +29,7 @@ public class ExceptionHandlingMiddleware
         };
 
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)response.StatusCode;
+        context.Response.StatusCode = response.StatusCode;
 
         await context.Response.WriteAsJsonAsync(response);
     }
