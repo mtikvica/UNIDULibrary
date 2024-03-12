@@ -1,4 +1,4 @@
-name: .NET
+name: .NET Core CI
 
 on:
   push:
@@ -21,15 +21,15 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.x' # You can change this to the version you are using
+        dotnet-version: '8.0.x' # You can change this to the version you are using
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore UNIDULibrary.sln
 
     - name: Build
-      run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
+      run: dotnet build UNIDULibrary.sln --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test --configuration ${{ matrix.configuration }} --no-build
+      run: dotnet test UNIDULibrary.sln --configuration Release --no-build
 
     # Add additional steps here for deployment, publishing artifacts, etc.
