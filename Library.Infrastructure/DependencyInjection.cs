@@ -1,4 +1,5 @@
-﻿using Library.Application.Abstractions.Clock;
+﻿using Library.Application.Abstractions.Caching;
+using Library.Application.Abstractions.Clock;
 using Library.Application.Abstractions.Data;
 using Library.Application.Abstractions.OpenLibrary;
 using Library.Domain.Abstractions;
@@ -10,6 +11,7 @@ using Library.Domain.Fines;
 using Library.Domain.Loans;
 using Library.Domain.Publishers;
 using Library.Domain.Reservations;
+using Library.Infrastructure.Cache;
 using Library.Infrastructure.Clock;
 using Library.Infrastructure.Data;
 using Library.Infrastructure.OpenLibrary;
@@ -48,12 +50,25 @@ public static class DependencyInjection
 
         services.AddHealthChecks(configuration);
 
+        AddCaching(services, configuration);
+
         return services;
     }
 
-    public static void AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
+    private static void AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHealthChecks()
             .AddSqlServer(configuration.GetConnectionString("Database")!);
     }
+
+    private static void AddCaching(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("Cache") ??
+                                    throw new ArgumentNullException(nameof(configuration));
+
+        services.AddStackExchangeRedisCache(options => options.Configuration = connectionString);
+
+        services.AddSingleton<ICacheService, CacheService>();
+    }
+
 }
