@@ -29,7 +29,6 @@ internal sealed class CreateBookCommandHandler(
         {
             return Result.Failure<Guid>(BookErrors.NotFound);
         }
-        var authorIds = new List<Guid>();
         var publisherResponseName = openLibraryBookResponse.Publishers.FirstOrDefault();
 
         if (string.IsNullOrEmpty(publisherResponseName))
@@ -45,11 +44,11 @@ internal sealed class CreateBookCommandHandler(
             _publisherRepository.Add(publisher);
         }
 
-        var isbn = openLibraryBookResponse.Isbn10.FirstOrDefault() ?? string.Empty;
+        var isbn = openLibraryBookResponse.Isbn10.FirstOrDefault() ?? request.Isbn;
         var publishDate = openLibraryBookResponse.PublishDate?.Substring(openLibraryBookResponse.PublishDate.Length - 4);
 
         var book = Book.CreateFromOpenLibrary(openLibraryBookResponse.Title, isbn, publishDate,
-            openLibraryBookResponse.NumberOfPages, publisher.Id, authorIds);
+            openLibraryBookResponse.NumberOfPages, publisher.Id);
 
 
         foreach (var authorCode in openLibraryBookResponse.Authors)
@@ -61,7 +60,6 @@ internal sealed class CreateBookCommandHandler(
                 var authorResponse = await _openLibraryService.GetAuthorAsync(authorCode.Key);
                 author = Author.Create(authorResponse.Name, authorCode.Key);
                 _authorRepository.Add(author);
-                authorIds.Add(author.Id);
             }
 
             _authorBookReposiotry.Add(AuthorBook.Create(author.Id, book.Id));

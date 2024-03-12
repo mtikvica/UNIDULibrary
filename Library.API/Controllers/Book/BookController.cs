@@ -1,5 +1,6 @@
 ﻿using Library.Application.Books.CreateBookWithOpenLibrary;
 using Library.Application.Books.GetBookQuery;
+using Library.Application.Books.GetBooksQuery;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,15 @@ namespace Library.API.Controllers.Book;
 public class BookController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
+
+    [HttpGet]
+    public async Task<IActionResult> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var query = new GetBooksQuery(page, pageSize);
+        var result = await _mediator.Send(query, cancellationToken);
+
+        return Ok(result);
+    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetBook(Guid id, CancellationToken cancellationToken)
