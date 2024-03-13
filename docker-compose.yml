@@ -7,18 +7,27 @@ services:
       context: .
       dockerfile: Library.API/Dockerfile
   
-  uniduLibrary.db:
+  uniduLibrary-db:
     image: mcr.microsoft.com/mssql/server
-    container_name: uniduLibrary.db
+    container_name: SQLServer
     environment:
       - SA_PASSWORD=Pass@word
       - ACCEPT_EULA=Y
     ports:
       - "1433:1433"
 
-  uniduLibrary.Redis:
+  uniduLibrary-redis:
     image: redis
-    container_name: uniduLibrary.Redis
+    container_name: Redis
     restart: always
     ports:
       - "6379:6379"
+
+  uniduLibrary-seq:
+    image: datalust/seq:latest
+    container_name: Seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 9090:80
