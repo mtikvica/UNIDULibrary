@@ -1,5 +1,4 @@
 ﻿using Library.Domain.Abstractions;
-using Library.Domain.Loans.Event;
 
 namespace Library.Domain.Loans;
 
@@ -21,11 +20,7 @@ public sealed class Loan : Entity
 
     public static Loan Create(Guid studentId, Guid bookCopyId, DateTime date)
     {
-        var loan = new Loan(bookCopyId, studentId, date);
-
-        loan.RaiseDomainEvent(new LoanCreatedDomainEvent(bookCopyId));
-
-        return loan;
+        return new Loan(bookCopyId, studentId, date);
     }
 
     public bool IsOverdue()
