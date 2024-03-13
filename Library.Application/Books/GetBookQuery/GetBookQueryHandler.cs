@@ -29,19 +29,26 @@ internal sealed class GetBookQueryHandler(ISqlConnectionFactory sqlConnectionFac
                  WHERE b.[Id] = @BookId
             """;
 
-        var book = await connection.QueryAsync<BookResponse, AuthorResponse, BookResponse>(sql, (book, author) =>
+        var books = await connection.QueryAsync<BookResponse, AuthorResponse, BookResponse>(sql, (book, author) =>
         {
+
             book.Authors.Add(author);
             return book;
         },
         new { request.BookId },
         splitOn: "AuthorName");
 
-        if (!book.Any())
+        if (!books.Any())
         {
             return Result.Failure<BookResponse>(BookErrors.NotFound);
         }
 
-        return book.FirstOrDefault();
+
+        return books.GroupBy(b => b.Id).Select(group =>
+        {
+            var book = group.First();
+            book.Authors = group.SelectMany(b => b.Authors).Distinct().ToList();
+            return book;
+        }).First();
     }
 }
