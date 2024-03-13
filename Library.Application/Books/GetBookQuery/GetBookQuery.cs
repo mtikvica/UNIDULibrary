@@ -1,4 +1,9 @@
-﻿using Library.Application.Abstractions.Messaging;
+﻿using Library.Application.Abstractions.Caching;
 
 namespace Library.Application.Books.GetBookQuery;
-public sealed record GetBookQuery(Guid BookId) : IQuery<BookResponse>;
+public sealed record GetBookQuery(Guid BookId) : ICachedQuery<BookResponse>
+{
+    public string CacheKey => $"book-{BookId}";
+
+    public TimeSpan? Expiration => null;
+}
