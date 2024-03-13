@@ -1,5 +1,4 @@
 ﻿using Library.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 
 namespace Library.API.Extensions;
 
@@ -11,6 +10,5 @@ public static class ApplicationMigrationExtension
 
         using var context = serviceScope.ServiceProvider.GetRequiredService<LibraryDbContext>();
         context.Database.EnsureCreated();
-        context.Database.Migrate();
     }
 }
