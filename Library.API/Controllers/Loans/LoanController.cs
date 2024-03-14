@@ -17,7 +17,7 @@ public class LoanController(ISender sender) : ControllerBase
 
         var result = await _sender.Send(command, cancellationToken);
 
-        return CreatedAtAction(nameof(LoanBook), new { id = result.Value }, result);
+        return CreatedAtAction(nameof(LoanBook), result.IsSuccess ? result.Value : result.Error);
     }
 
     [HttpPost("reservation/{id}")]
@@ -27,6 +27,6 @@ public class LoanController(ISender sender) : ControllerBase
 
         var result = await _sender.Send(command, cancellationToken);
 
-        return CreatedAtAction(nameof(LoanBookWithReservation), new { id = result.Value }, result);
+        return CreatedAtAction(nameof(LoanBookWithReservation), result.IsSuccess ? result.Value : result.Error);
     }
 }

@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers.Students;
-[Route("api/[controller]")]
+[Route(template: "students")]
 [ApiController]
 public class StudentController(IMediator mediator) : ControllerBase
 {
@@ -16,7 +16,7 @@ public class StudentController(IMediator mediator) : ControllerBase
         var query = new GetStudentQuery(id);
         var student = await _mediator.Send(query);
 
-        return Ok(student);
+        return student.IsSuccess ? Ok(student.Value) : NotFound(student.Error);
     }
 
     [HttpGet]

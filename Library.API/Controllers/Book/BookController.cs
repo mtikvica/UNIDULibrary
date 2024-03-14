@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers.Book;
-[Route("api/[controller]")]
+[Route("books")]
 [ApiController]
 public class BookController(IMediator mediator) : ControllerBase
 {

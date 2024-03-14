@@ -2,6 +2,7 @@
 using Library.Application.Abstractions.Data;
 using Library.Application.Abstractions.Messaging;
 using Library.Domain.Abstractions;
+using Library.Domain.Students;
 
 namespace Library.Application.Students.GetStudentQuery;
 internal class GetStudentQueryHandler(ISqlConnectionFactory sqlConnectionFactory) : IQueryHandler<GetStudentQuery, StudentResponse>
@@ -26,6 +27,8 @@ internal class GetStudentQueryHandler(ISqlConnectionFactory sqlConnectionFactory
                 WHERE s.Id = @Id
             """;
 
-        return await connection.QuerySingleOrDefaultAsync<StudentResponse>(sql, new { request.Id });
+        var student = await connection.QuerySingleOrDefaultAsync<StudentResponse>(sql, new { request.Id });
+
+        return student is null ? Result.Failure<StudentResponse>(StudentErrors.NotFound) : (Result<StudentResponse>)student;
     }
 }

@@ -16,6 +16,6 @@ public class ReservationController(ISender sender) : ControllerBase
 
         var result = await _sender.Send(command, cancellationToken);
 
-        return CreatedAtAction(nameof(ReserveBook), new { id = result.Value }, result);
+        return CreatedAtAction(nameof(ReserveBook), result.IsSuccess ? result.Value : result.Error);
     }
 }

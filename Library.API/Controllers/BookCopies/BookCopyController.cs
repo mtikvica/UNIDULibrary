@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers.BookCopies;
-[Route("api/[controller]")]
+[Route("bookcopies")]
 [ApiController]
 public class BookCopyController(IMediator mediator) : ControllerBase
 {
