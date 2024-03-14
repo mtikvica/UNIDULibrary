@@ -24,6 +24,13 @@ internal sealed class CreateBookCommandHandler(
 
     public async Task<Result<Guid>> Handle(CreateBookCommand request, CancellationToken cancellationToken)
     {
+        var existingBook = await _bookRepository.GetByIsbn(request.Isbn, cancellationToken);
+
+        if (existingBook is not null)
+        {
+            return Result.Failure<Guid>(BookErrors.AlreadyExist);
+        }
+
         var openLibraryBookResponse = await _openLibraryService.GetBookDetailsAsync(request.Isbn);
         if (openLibraryBookResponse is null)
         {

@@ -7,4 +7,8 @@ public static class BookErrors
         "Book.NotFound",
         "Book is not found!");
 
+    public static Error AlreadyExist = new(
+        "Book.AlreadyExist",
+        "Book already exist!");
+
 }
