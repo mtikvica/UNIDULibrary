@@ -1,5 +1,6 @@
 ﻿using Library.Application.Loans.CreateLoan;
 using Library.Application.Loans.CreateLoanReservation;
+using Library.Application.Loans.ReturnLoan;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,5 +29,15 @@ public class LoanController(ISender sender) : ControllerBase
         var result = await _sender.Send(command, cancellationToken);
 
         return CreatedAtAction(nameof(LoanBookWithReservation), result.IsSuccess ? result.Value : result.Error);
+    }
+
+    [HttpPut("return/{id}")]
+    public async Task<IActionResult> ReturnBook(Guid id, CancellationToken cancellationToken)
+    {
+        var command = new ReturnLoanCommand(id);
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        return result.IsFailure ? BadRequest(result.Error) : Created(nameof(ReturnBook), result.Value);
     }
 }

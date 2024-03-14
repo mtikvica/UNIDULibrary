@@ -24,7 +24,7 @@ internal class CreateReservationCommandHandler(IReservationRepository reservatio
 
         if (fines.Any())
         {
-            return Result.Failure<Guid>(FineErrors.AlreadyFined);
+            return Result.Failure<Guid>(FineErrors.Fined);
         }
 
         var studentAlreadyHasReservationOnABook = await _reservationRepository.GetActiveReservationOnBookAsync(request.StudentId, request.BookId);

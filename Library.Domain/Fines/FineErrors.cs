@@ -3,8 +3,8 @@
 namespace Library.Domain.Fines;
 public static class FineErrors
 {
-    public static Error AlreadyFined = new(
+    public static Error Fined = new(
         "Fine.Fined",
-        "Student is already fined!"
+        "Student is fined!"
         );
 }

@@ -13,8 +13,9 @@ internal sealed class LoanConfiguration : IEntityTypeConfiguration<Loan>
 
         builder.ComplexProperty(loan => loan.DateRange, dateRange =>
         {
-            dateRange.Property(dateRange => dateRange.StartDate).HasColumnName("StartDate");
-            dateRange.Property(dateRange => dateRange.EndDate).HasColumnName("EndDate");
+            dateRange.Property(dateRange => dateRange.LoanedDate).HasColumnName("LoanedDate");
+            dateRange.Property(dateRange => dateRange.ReturnedDate).HasColumnName("ReturnedDate");
+            dateRange.Property(dateRange => dateRange.DueDate).HasColumnName("DueDate");
         });
 
         builder.HasOne<Student>()
